@@ -1,0 +1,8 @@
+*.log
+*/tmp/**
+*/dist/**
+.DS_Store
+.directory
+*.swp
+*~
+*/.inventory
