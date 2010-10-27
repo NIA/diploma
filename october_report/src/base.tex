@@ -1,0 +1,79 @@
+\documentclass[a4paper,11pt]{report}
+  \usepackage{cmap}
+  \usepackage[english,russian]{babel}
+  \usepackage[utf8]{inputenc}
+  \usepackage{indentfirst}
+  \frenchspacing
+
+  \author{И.\,А.\,Новиков, кафедра АФТИ ФФ НГУ, гр.\,7305\\ Руководитель: Д.\,А.\,Гладкий, Софтлаб-Нск}
+  \title{<<Система моделирования деформаций неупругих тел в реальном времени>>\\\itshape Октябрьский отчёт}
+\begin{document}
+  \maketitle
+  \tableofcontents
+  \chapter*{Введение}
+  \addcontentsline{toc}{chapter}{Введение}
+  \chapter{Описание предметной области}
+  \chapter{Постановка задачи}
+  Полезно почитать книгу \cite{muller-meshless}.
+
+  \begin{thebibliography}{9}
+  \addcontentsline{toc}{chapter}{Литература}
+    \bibitem{muller-meshless}
+      M. Müller, B. Heidelberger, M. Teschner, M. Gross.
+      \newblock Meshless Deformations Based on Shape Matching.
+      \newblock --- Proceedings of SIGGRAPH'05, Los Angeles, USA, 2005.
+      \newblock --- с.~471--478.
+
+    \bibitem{visser-mapping}
+      Hans de Visser, Olivier Comas, David Conlan, Sébastien Ourselin, Josh Passenger, Olivier Salvado.
+      \newblock Deforming a High-Resolution Mesh in Real-Time by Mapping onto a Low-Resolution Physical Model.
+      \newblock --- Lecture Notes in Computer Science, Vol. 5104/2008, Springer Science+Business Media,
+                    USA, 2008.
+      \newblock --- с.~135--146.
+
+    \bibitem{muller-physmodels}
+      A. Nealen, M. Müller, R. Keiser, E. Boxerman, M. Carlson.
+      \newblock Physically Based Deformable Models in Computer Graphics.
+      \newblock --- Computer Graphics Forum, Vol. 25, issue 4, Wiley-Blackwell, 2006.
+      \newblock --- с.~809--836.
+
+    \bibitem{muller-position-dynamics}
+      M. Müller, B. Heidelberger, M. Hennix, J. Ratcliff.
+      \newblock Position Based Dynamics.
+      \newblock --- Proceedings of Virtual Reality Interactions and Physical Simulations (VRIPhys),
+                    Madrid, Spain, 2006.
+      \newblock --- с.~71--80.
+
+    \bibitem{huang-control-mesh}
+      Jin Huang, Lu Chen, Xinguo Liu, Hujun Bao.
+      \newblock Efficient Mesh Deformation Using Tetrahedron Control Mesh.
+      \newblock --- Proceedings of the 2008 ACM symposium on Solid and Physical Modeling, New York,
+                    USA, 2008.
+      \newblock --- с.~241--247.
+
+    \bibitem{muller-stable}
+      M. Müller, J. Dorsey, L. McMillan, R. Jagnow, B. Cutler.
+      \newblock Stable Real-Time Deformations.
+      \newblock --- Proceedings of ACM SIGGRAPH Symposium on Computer Animation (SCA), San Antonio,
+                    USA, 2002.
+      \newblock --- с.~49--54
+
+    \bibitem{fortran-jacobi-transform}
+      William Press, Brian Flannery, Saul Teukolsky.
+      \newblock Numerical Recipes in FORTRAN 77, Vol. 1.
+      \newblock --- Cambridge University Press, 1992.
+      \newblock --- с.~456--462.
+
+    \bibitem{hp-polar}
+      Augustin A. Dubrulle.
+      \newblock Frobenius Iteration for the Matrix Polar Decomposition
+      \newblock --- HP Labs Technical Reports, 1994
+
+    \bibitem{gems-middleware}
+      Jason Hughes.
+      \newblock What to Look for When Evaluating Middleware for Integration.
+      \newblock --- Game Engine Gems Vol. 1, Jones and Barlett Publishers, USA, 2010.
+      \newblock --- с.~3-10.
+  \end{thebibliography}
+\end{document}
+
