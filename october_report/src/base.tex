@@ -25,6 +25,8 @@
   \renewcommand{\theenumii}{(\asbuk{enumii})}
   \renewcommand{\labelenumii}{\asbuk{enumii})}
 
+  \bibliographystyle{gost780u}
+
   \author{И.\,А.\,Новиков, кафедра АФТИ ФФ НГУ, гр.\,7305}
   \title{Система моделирования деформаций неупругих тел в реальном времени}
 
@@ -296,7 +298,8 @@
     \vspace{0.5cm}
     Преподаватель: \underscore{2cm}
 
-    \bibliographystyle{gost780u}
-     \bibliography{../biblio/my}
+  \clearpage % TODO is this good?
+  \addcontentsline{toc}{section}{Список литературы}
+  \bibliography{../biblio/my}
 \end{document}
 
