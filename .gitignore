@@ -5,4 +5,5 @@
 .directory
 *.sw*
 *~
-*/.inventory
+.inventory
+*.bak
