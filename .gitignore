@@ -1,9 +1,4 @@
-*.log
 */tmp/**
 */dist/**
-.DS_Store
-.directory
-*.sw*
-*~
 .inventory
-*.bak
+*.vpp~*
