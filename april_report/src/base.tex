@@ -46,6 +46,9 @@
   \renewcommand{\theenumii}{(\asbuk{enumii})}
   \renewcommand{\labelenumii}{\asbuk{enumii})}
 
+  \let\oldsection\section
+  \renewcommand{\section}{\newpage\oldsection}
+
   \setcounter{tocdepth}{2} % глубина оглавления
 
   \bibliographystyle{gost780u}
