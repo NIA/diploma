@@ -17,6 +17,8 @@
 
   \addto\captionsrussian{
     \renewcommand\contentsname{Содержание}
+    \let\oldrefname\refname
+    \renewcommand\refname{\addcontentsline{toc}{section}{\oldrefname}\oldrefname}
   }
 
   \newcommand{\underscore}[1]{\hbox to#1{\hrulefill}}
@@ -1263,8 +1265,6 @@
 
     \vspace{0.5cm}
     Преподаватель: \underscore{2cm}
-
-  \addcontentsline{toc}{section}{Список литературы}
 
   \begin{flushleft}
     \bibliography{../../biblio/my}
