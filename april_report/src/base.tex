@@ -8,6 +8,7 @@
   \usepackage{indentfirst}
   \usepackage{cite}
   \usepackage{amsmath} % для \eqref
+  \usepackage{amsthm} % для \pushQED
   \usepackage{color} % пока только для TODO:
   \usepackage[pdftex]{graphicx}
   \usepackage{subfig}
@@ -27,12 +28,26 @@
   \newcommand{\note}[1]{\textit{Примечание: #1}}
   \newcommand{\eng}[1]{{\English #1}}
 
-  % вставка картинки: \figure[params]{file}{описание}
+  % обёртка с моими настройками поверх figure:
+  % \begin{myfigure}{подпись}{fig:label} ... \end{myfigure}
+  \newenvironment{myfigure}[2]%
+    {\pushQED{\caption{#1} \label{#2}} % push caption & label
+     \begin{figure}[!htb]\centering } %
+    {  \popQED % pop caption & label
+     \end{figure}}
+
+  % вставка картинки: \figure[params]{подпись}{file}
+  % создаёт label вида fig:file
   \newcommand{\includefigure}[3][]{
-    \begin{figure}[!htb]
-      \center{\includegraphics[#1]{#2}}
-      \caption{#3} \label{fig:#2}
-    \end{figure}
+    \begin{myfigure}{#2}{fig:#3}
+      \includegraphics[#1]{#3}
+    \end{myfigure}
+  }
+
+  % вставка subfigure внутри myfigure:
+  % \subfigure[params]{подпись}{file}
+  \newcommand{\subfigure}[3][]{
+    \subfloat[#2]{\label{fig:#3}\includegraphics[#1]{#3}}
   }
 
   \newcommand{\vect}[1]{\vec{#1}} % единое выделение векторов (стрелкой)
@@ -701,7 +716,7 @@
         п.~\ref{sssec:hi-poly}, описатель вершины, объект класса VertexInfo, используется для
         конвертации вершин из формата, используемого в~приложении, во внутренний формат и обратно.
 
-        \includefigure{core-vertices}{представление моделируемого объекта в системе.}
+        \includefigure{представление моделируемого объекта в системе}{core-vertices}
 
         Отдельного внимания требует реализация группировки физических и графических вершин в
         кластеры. Помимо того, что объект класса Cluster хранит динамические массивы указателей
@@ -719,15 +734,11 @@
         максимальное число кластеров, в которое может входить та или иная вершина, ограничивается
         сверху и используется статический массив.
 
-        % TODO определить окружение для этого
-        \begin{figure}[!htb]
-          \centering
-          \subfloat[Автоматическое регулярное разбиение]{\label{fig:clusters-automatic}\includegraphics[width=0.4\textwidth]{clusters-automatic}}
+        \begin{myfigure}{Два способа задания кластеров}{fig:clusters}
+          \subfigure[width=0.4\textwidth]{Автоматическое регулярное разбиение}{clusters-automatic}
           \hspace{0.1\textwidth}
-          \subfloat[Задание произвольных областей]{\label{fig:clusters-arbitrary}\includegraphics[width=0.4\textwidth]{clusters-arbitrary}}\\
-          \caption{Два способа задания кластеров}
-          \label{fig:clusters}
-        \end{figure}
+          \subfigure[width=0.4\textwidth]{Задание произвольных областей}{clusters-arbitrary}
+        \end{myfigure}
 
         Кластеры могут быть заданы двумя способами. В простейшем случае можно выполнить автоматическое
         разбиение объекта плоскостями, перпендикулярными каждой из осей и делящими ось на равные
@@ -752,7 +763,7 @@
         приложена ли сила к~вершине, находящейся в данной точке, и метод get\_value\_at,
         возвращающий вектор силы в этой точке.
 
-        \includefigure{core-interaction}{получение информации о внешних воздействиях.}
+        \includefigure{получение информации о внешних воздействиях.}{core-interaction}
 
         \paragraph{Характеристики объекта как целого.}
         Как уже упоминалось в п.~\ref{sssec:proposed_changes} и п.~\ref{sssec:events}, в~процессе
@@ -765,7 +776,7 @@
         к движению жёсткой рамы. Получаемая при этом матрица поворота используется в процессе
         обнаружения отклонения вершины от начальной позиции.
 
-        \includefigure{core-bodies}{расчёт и интегрирование характеристик объекта как целого.}
+        \includefigure{расчёт и интегрирование характеристик объекта как целого.}{core-bodies}
 
         \paragraph{Реакции на события.}
         Реакции на три вида поддерживаемых событий: удар в~заданное множество вершин, отклонение от
@@ -780,7 +791,7 @@
         RegionReaction хранит в себе указатель на IRegion, также при создании можно указать, что
         является событием: вход в заданную этим указателем область или выход из неё.
 
-        \includefigure{core-reactions}{определение реакции на события.}
+        \includefigure{определение реакции на события.}{core-reactions}
 
         \paragraph{Параллельные вычисления.}
         Как уже говорилось в подразделе~\ref{ssec:parallel}, алгоритм разбивается на задачи, параллельное
@@ -800,7 +811,7 @@
         классов. Для замены набора примитивов достаточно передать в~систему новую реализацию
         <<фабрики>>.
 
-        \includefigure{parallel}{абстрактная фабрика примитивов синхронизации.}
+        \includefigure{абстрактная фабрика примитивов синхронизации.}{parallel}
 
         Впрочем, необходимо с~осторожностью использовать блокирующие примитивы синхронизации для
         ограничения доступа к разделяемым данным, поскольку их неправильное применение может
@@ -895,7 +906,7 @@
         выступает квадратный корень.
 
       \subsubsection{Подсистема журналирования и обработки ошибок}
-        \includefigure{logging}{структура подсистемы журналирования и обработки ошибок.}
+        \includefigure{структура подсистемы журналирования и обработки ошибок.}{logging}
 
         Основной класс этой подсистемы, Logger, реализует шаблон проектирования <<Одиночка>> (англ.
         \eng{singleton}), что обеспечивает работу с одним и тем же объектом по всей системе без
@@ -959,16 +970,12 @@
         полигонов) в отображаемой сетке. Цилиндр показан на рис.~\ref{fig:cylinder-initial},
         изображение получено в тестовом приложении.
 
-        % TODO определить окружение для этого
-        \begin{figure}[!htb]
-          \centering
-          \subfloat[Исходное состояние]{\label{fig:cylinder-initial}\includegraphics[width=0.3\textwidth]{cylinder}}
-          \subfloat[Удар в середину]{\label{fig:cylinder-deformed-1}\includegraphics[width=0.3\textwidth]{cylinder-deformed-1}}\\
-          \subfloat[Удар в край]{\label{fig:cylinder-deformed-2}\includegraphics[width=0.3\textwidth]{cylinder-deformed-2}}
-          \subfloat[Комбинация ударов]{\label{fig:cylinder-deformed-3}\includegraphics[width=0.3\textwidth]{cylinder-deformed-3}}
-          \caption{Тестовый объект <<Цилиндр>>}
-          \label{fig:cylinder}
-        \end{figure}
+        \begin{myfigure}{Тестовый объект <<Цилиндр>>}{fig:cylinder}
+          \subfigure[width=0.3\textwidth]{Исходное состояние}{cylinder-initial}
+          \subfigure[width=0.3\textwidth]{Удар в середину}   {cylinder-deformed-1}\\
+          \subfigure[width=0.3\textwidth]{Удар в край}       {cylinder-deformed-2}
+          \subfigure[width=0.3\textwidth]{Комбинация ударов} {cylinder-deformed-3}
+        \end{myfigure}
 
         Были протестированы следующие случаи воздействия на объект.
         \begin{enumerate}
@@ -989,7 +996,7 @@
         факторы, внешние по отношению к~приложению, например, загрузку процессора другими приложениями
         и операционной системой. Результаты измерений представлены в виде графика на рис.~\ref{fig:time-plot}.
 
-        \includefigure[width=1\linewidth]{time-plot}{зависимость времени вычисления от числа физических и отображаемых вершин.}
+        \includefigure[width=1\linewidth]{зависимость времени вычисления от числа физических и отображаемых вершин.}{time-plot}
 
         % TODO сравнение CPU/GPU TODO <- вспомнить что я хотел этим сказать
         \paragraph{Выводы.} Зависимость от числа вершин обоих типов близка к линейной.
@@ -1008,16 +1015,12 @@
         2800 точек в физической модели, сгруппированные в~32 кластера, и 28000 вершин (67500
         полигонов) в отображаемой сетке. Исходная форма объекта показана на рис.~\ref{fig:car-initial}.
 
-        % TODO определить окружение для этого
-        \begin{figure}[!htb]
-          \centering
-          \subfloat[Исходное состояние]{\label{fig:car-initial}\includegraphics[width=0.4\textwidth]{car}}
-          \subfloat[Удар в середину]{\label{fig:car-deformed-1}\includegraphics[width=0.4\textwidth]{car-deformed-1}}\\
-          \subfloat[Удар в край]{\label{fig:car-deformed-2}\includegraphics[width=0.4\textwidth]{car-deformed-2}}
-          \subfloat[Комбинация ударов]{\label{fig:car-deformed-3}\includegraphics[width=0.4\textwidth]{car-deformed-3}}
-          \caption{Тестовый объект <<Автомобиль>>}
-          \label{fig:car}
-        \end{figure}
+        \begin{myfigure}{Тестовый объект <<Автомобиль>>}{fig:car}
+          \subfigure[width=0.3\textwidth]{Исходное состояние}{car-initial}
+          \subfigure[width=0.3\textwidth]{Удар в середину}   {car-deformed-1}\\
+          \subfigure[width=0.3\textwidth]{Удар в край}       {car-deformed-2}
+          \subfigure[width=0.3\textwidth]{Комбинация ударов} {car-deformed-3}
+        \end{myfigure}
 
         Были протестированы следующие случаи воздействия на объект.
         \begin{enumerate}
@@ -1042,14 +1045,10 @@
         однопоточной версией к затратам при данном числе потоков, показывающее, во сколько раз
         многопоточная версия системы быстрее однопоточной.
 
-        % TODO определить окружение для этого
-        \begin{figure}[!htb]
-          \centering
-          \subfloat[Время вычислений]{\label{fig:time-plot-threads}\includegraphics[width=0.5\textwidth]{time-plot-threads}}
-          \subfloat[Относительное ускорение]{\label{fig:speedup-plot}\includegraphics[width=0.5\textwidth]{speedup-plot}}
-          \caption{Зависимость скорости вычислений от числа потоков, выполняющихся на разных ядрах процессора}
-          \label{fig:thread-plots}
-        \end{figure}
+        \begin{myfigure}{Зависимость скорости вычислений от числа потоков, выполняющихся на разных ядрах процессора}{fig:thread-plots}
+          \subfigure[width=0.5\textwidth]{Время вычислений}{time-plot-threads}
+          \subfigure[width=0.5\textwidth]{Относительное ускорение}{speedup-plot}
+        \end{myfigure}
 
         \paragraph{Выводы.}
         Наблюдается рост скорости вычислений, выполняемых параллельно, при увеличении числа потоков.
