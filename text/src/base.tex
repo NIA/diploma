@@ -997,10 +997,10 @@
         полигонов) в отображаемой сетке. Исходная форма объекта на рис.~\ref{fig:cylinder-initial}.
 
         \begin{myfigure}{Тестовый объект <<Цилиндр>>}{fig:cylinder}
-          \subfigure[width=0.3\textwidth]{Исходное состояние}{cylinder-initial}
-          \subfigure[width=0.3\textwidth]{Удар в середину}   {cylinder-deformed-1}\\
-          \subfigure[width=0.3\textwidth]{Удар в край}       {cylinder-deformed-2}
-          \subfigure[width=0.3\textwidth]{Комбинация ударов} {cylinder-deformed-3}
+          \subfigure[width=0.25\textwidth]{Исходное состояние}{cylinder-initial}    \hspace{1cm}
+          \subfigure[width=0.25\textwidth]{Удар в середину}   {cylinder-deformed-1} \\
+          \subfigure[width=0.25\textwidth]{Удар в край}       {cylinder-deformed-2} \hspace{1cm}
+          \subfigure[width=0.25\textwidth]{Комбинация ударов} {cylinder-deformed-3}
         \end{myfigure}
 
         Были протестированы следующие случаи воздействия на объект:
@@ -1009,8 +1009,6 @@
           \item Продольный удар в край объекта, см. рис.~\ref{fig:cylinder-deformed-2}.
           \item Комбинация ударов, см. рис.~\ref{fig:cylinder-deformed-3}.
         \end{enumerate}
-
-        \todo{настоящие картинки цилиндра.}
 
         Также было проведено исследование зависимости времени расчётов от числа вершин в физической
         модели и отображаемой сетке. Для каждого числа вершин производилось 5 запусков тестового
@@ -1049,9 +1047,9 @@
         треугольника) в отображаемой сетке. Исходная форма объекта показана на рис.~\ref{fig:car-initial}.
 
         \begin{myfigure}{Тестовый объект <<Автомобиль>>}{fig:car}
-          \subfigure[width=0.3\textwidth]{Исходное состояние}{car-initial}
-          \subfigure[width=0.3\textwidth]{Удар в середину}   {car-deformed-1}\\
-          \subfigure[width=0.3\textwidth]{Удар в край}       {car-deformed-2}
+          \subfigure[width=0.3\textwidth]{Исходное состояние}{car-initial}    \hspace{1cm}
+          \subfigure[width=0.3\textwidth]{Удар в середину}   {car-deformed-1} \\
+          \subfigure[width=0.3\textwidth]{Удар в край}       {car-deformed-2} \hspace{1cm}
           \subfigure[width=0.3\textwidth]{Комбинация ударов} {car-deformed-3}
         \end{myfigure}
 
@@ -1061,8 +1059,6 @@
           \item Продольный удар в край объекта, см. рис.~\ref{fig:car-deformed-2}.
           \item Комбинация ударов, см. рис.~\ref{fig:car-deformed-3}.
         \end{enumerate}
-
-        \todo{настоящие картинки машинки.}
 
         Чтобы проверить масштабируемость многопоточного алгоритма, сравнивалось быстродействие
         версий тестового приложения с разным числом рабочих потоков, от 1 до 4, на четырёхъядерном
