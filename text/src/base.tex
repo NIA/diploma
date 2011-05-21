@@ -15,6 +15,7 @@
   \usepackage{subfig}
   \usepackage{numprint}
   \usepackage[left=3cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
+  \usepackage{datetime}
   \graphicspath{{../img/}{../../img/}}
   \frenchspacing
 
@@ -81,6 +82,8 @@
   \npthousandsep{\,}
   \npthousandthpartsep{}
   \npdecimalsign{,}
+
+  \newcommand{\checkdate}[3]{({\Russian дата обращения: \formatdate{#1}{#2}{#3}})}
 
   \author{И.\,А.\,Новиков, кафедра АФТИ ФФ НГУ, гр.\,7305}
   \title{Система моделирования деформаций неупругих тел в реальном времени}
