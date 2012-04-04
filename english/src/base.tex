@@ -1,10 +1,10 @@
-\documentclass[a4paper, 14pt, titlepage]{extarticle}
+\documentclass[a4paper, 12pt, titlepage]{extarticle}
   \usepackage{cmap}
   \usepackage[hidelinks,pdftex,unicode]{hyperref}
   \usepackage{mathtext} % для кириллицы в формулах
   \usepackage[T2A]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage[english,russian]{babel}
+  \usepackage[english]{babel}
   \usepackage{indentfirst}
   \usepackage{cite}
   \usepackage{amsmath} % для \eqref
@@ -21,17 +21,19 @@
 
   \DeclareSymbolFont{T2Aletters}{T2A}{cmr}{m}{it} % кириллица в формулах курсивом
 
-  \addto\captionsrussian{
-    \renewcommand\contentsname{Содержание}
+  %\addto\captionsrussian{
+    %\renewcommand\contentsname{Содержание}
     % перекрываю \refname, чтобы список литературы сам добавлял себя в оглавление
     \let\oldrefname\refname
     \renewcommand\refname{\addcontentsline{toc}{section}{\oldrefname}\oldrefname}
-  }
+  %}
 
   \newcommand{\underscore}[1]{\hbox to#1{\hrulefill}}
   \newcommand{\todo}[1]{\textbf{\textcolor{red}{TODO: #1}}}
-  \newcommand{\note}[1]{\textit{Примечание: #1}}
+  \newcommand{\note}[1]{\textit{Note: #1}}
   \newcommand{\eng}[1]{{\English #1}}
+  \newcommand{\rus}[1]{{\Russian #1}}
+  \newcommand{\original}[1]{}
 
   % обёртка с моими настройками поверх figure:
   % \begin{myfigure}{подпись}{fig:label} ... \end{myfigure}
@@ -61,19 +63,19 @@
   \renewcommand{\le}{\leqslant} % <= с наклонной нижней перекладиной
   \renewcommand{\ge}{\geqslant} % >= с наклонной нижней перекладиной
 
-  \linespread{1.3}
+  \linespread{1.0}
 
   % русские буквы для списков и частей рисунка
-  \renewcommand{\theenumii}{(\asbuk{enumii})}
-  \renewcommand{\labelenumii}{\asbuk{enumii})}
-  \renewcommand{\thesubfigure}{\asbuk{subfigure}}
+  %\renewcommand{\theenumii}{(\asbuk{enumii})}
+  %\renewcommand{\labelenumii}{\asbuk{enumii})}
+  %\renewcommand{\thesubfigure}{\asbuk{subfigure}}
 
-  \let\oldsection\section
-  \renewcommand{\section}{\newpage\oldsection}
+  %\let\oldsection\section
+  %\renewcommand{\section}{\newpage\oldsection}
 
   \setcounter{tocdepth}{3} % глубина оглавления
 
-  \bibliographystyle{gost780u}
+  \bibliographystyle{unsrt}
 
   \hyphenation{англ} % убрать перенос в этом сокращении
 
@@ -83,10 +85,10 @@
   \npthousandthpartsep{}
   \npdecimalsign{,}
 
-  \newcommand{\checkdate}[3]{({\Russian дата обращения: \formatdate{#1}{#2}{#3}})}
+  \newcommand{\checkdate}[3]{({accessed at: \formatdate{#1}{#2}{#3}})}
 
-  \author{И.\,А.\,Новиков, кафедра АФТИ ФФ НГУ, гр.\,7305}
-  \title{Система моделирования деформаций неупругих тел в реальном времени}
+  \author{Ivan Novikov, NSU Physics Department, group 7355}
+  \title{A system for modeling plastic deformations of body in real-time}
 
 \begin{document}
 
@@ -94,66 +96,73 @@
 
   \thispagestyle{empty}
   \begin {center}
-  МИНОБРНАУКИ РОССИИ
+  Ministry of Education of Russia
 
   \vspace{0.3cm}
 
-  Государственное образовательное учреждение\\
-  высшего профессионального образования\\
-  «Новосибирский государственный университет» (НГУ)
+  Novosibirsk State University
 
-  \vspace{0.6cm}
+  \vspace{1.6cm}
 
-  Физический факультет
-
-  \vspace {2cm}
-
-  Квалификационная работа на соискание\\
-  степени бакалавра
+  Physics department
 
   \vspace {0.5cm}
 
-  Кафедра автоматизации физико-технических исследований
+  Automation of research physics and technology chair
+
+  \vspace {5cm}
+
+  Report
 
   \vspace {1cm}
 
-  Новиков Иван Александрович
+  Ivan Novikov, group 7355
 
   \vspace {1.5cm}
 
-  \textbf{СИСТЕМА МОДЕЛИРОВАНИЯ ДЕФОРМАЦИЙ НЕУПРУГИХ ТЕЛ В РЕАЛЬНОМ ВРЕМЕНИ}
+  \textbf{A system for modeling plastic deformations of body in real-time}
 
   \vspace {1.5cm}
 
   \begin{flushright}
 
-    Научный руководитель:
+    Supervisor:
 
-    Гладкий Денис Александрович,\\
-    ООО «МС ТИМ»
+    Dennis Gladky
 
   \end{flushright}
 
-  \vspace {3cm}
+  \vspace {7cm}
 
-  Новосибирск~--- 2011~год
+  Novosibirsk, 2012
   \end {center}
 
 %------------------------- содержание -------------------------
 
   \tableofcontents
   \newpage
+  \setlength{\parskip}{1ex}
 
 %-------------------------- введение --------------------------
-  \section{Введение}
+  \section{Introduction}
 
+    \original{
     Приложения виртуальной реальности становятся чрезвычайно рас\-прос\-тра\-нён\-ны\-ми в~наши~дни.  Два
     основных их типа~--- это компьютерные игры и~обучающие симуляторы (тренажёры). Несмотря на
     различные применения, эти два типа приложений имеют много общего, поскольку в~обоих случаях
     требуется создать иллюзию присутствия у~пользователя. Для~этого необходимо как генерировать
     фотореалистичные изображения, так и правдоподобно моделировать физику взаимодействия объектов
     виртуального мира: их движение, столкновения, деформации и~разрушение.
+    }
 
+    Virtual reality applications become extremely wide-spread nowadays. Two basic types of such
+    applications are computer games and training simulators. Despite of different uses, this two
+    types of applications have a lot in common, because in both cases it is necessary to create
+    illusion of presence. It requires not only to generate photo-realistic images, but also model
+    interactions of virtual world objects (their motion, collisions, deformations and destruction)
+    in a verisimilar manner.
+
+    \original{
     Моделирование деформаций объектов является актуальной задачей, поскольку кроме приложений
     виртуальной реальности оно находит применение в~системах автоматизированного проектирования, а~также используется
     при~создании спецэффектов к~фильмам. В зависимости от поставленной задачи применяются различные
@@ -163,7 +172,18 @@
     выполняться длительное время, то в~интерактивных приложениях расчёт одного шага вычислений должен
     происходить не~дольше, чем за~промежуток между кадрами, чтобы обеспечивать плавную анимацию
     и отсутствие задержек между воздействием на объект и его деформацией.
+    }
 
+    Modeling deformations is a topical problem, since besides virtual reality applications it is
+    applied in Computer Aided Design (CAD) systems and for making special effects for motion
+    pictures.  Different approaches can be applied depending on task. Namely, CAD systems require
+    maximal accuracy of computation, while for films and virtual reality visual plausibility is
+    enough. Moreover, while % repetition of while (?)
+    computation for CAD software and special effects may take a long time, a~step of computation in in interactive
+    applications should take no longer than inter-frame interval to ensure smooth animation and
+    eliminate lags between interaction with an object and its deformation.
+
+    \original{
     Жёсткое требование быстродействия в приложениях реального времени не~только вынуждает
     использовать упрощённые физические модели деформации тела, менее точные, чем используемые
     в~инженерных расчётах, но и накладывают существенные ограничения на способ представления
@@ -176,9 +196,23 @@
     современных настольных компьютерах и компьютерах, используемых в тренажёрах. Из-за этого
     невозможно использовать одно и~то~же представление объекта и для моделирования, и для
     отображения.
+    }
 
-  \section{Описание предметной области}\label{sec:domain}
+    Severe performance requirements of virtual reality applications not only makes developers use
+    simplified physical models of deformations, but also significantly limits the way of
+    representation of modelled objects. Usually it is represented in a discrete way: as a mesh, a
+    grid or a set of unconnected points. The time of computations is directly related (typically,
+    linearly \cite{mueller-meshless}) to the number of points in such representation.
+    Highly-detailed meshes of hundreds of thousands and even millions of points are commonly used
+    for displaying detailed objects, which is far beyond maximum possible number of points for most
+    real-time algorithms \cite{mueller-stable, mueller-meshless, chang-crash} if they are applied on
+    usual modern personal computers. So it becomes impossible to use the same representation for
+    both modeling and displaying of an object.
 
+
+  \section{Overview of the subject area}\label{sec:domain}
+
+    \original{
     Существуют различные подходы к~моделированию деформаций в~реальном времени. В простейшем случае
     ограничения на~быстродействие алгоритма обходятся за счёт использования предварительно рассчитанных
     деформированных состояний для~некоторого конечного набора возможных ударов по~объекту, одно из которых
@@ -191,7 +225,20 @@
     для предварительных расчётов после каждого изменения объекта, прежде чем он может быть загружен
     в приложение для тестирования, создаёт неудобства при разработке приложения. Поэтому наибольший
     интерес представляют решения, в которых моделирование деформаций происходит во время исполнения.
+    }
 
+    There are different approaches to modeling of deformations in real-time. In the simplest case
+    performance limitations can be left out by using precomputed deformed states for some limited
+    set of predefined strokes. In real-time, one of these precomputed states (or an interpolation
+    between several nearest ones) is chosen depending on which predefined stroke is the most similar
+    to happened one. In this case using relatively complex algorithms is allowed, such as
+    mass-spring system with high resolution or finite elements method. However, if happened stroke
+    differs from predefined ones a lot, or if some complicated combination of strokes takes place,
+    then simulated deformation will look unrealistic \cite[section~2]{chang-crash}. Furthermore,
+    considerable time required for preliminary computations creates inconveniences in the process of
+    development. So the algorithms of simulating deformations at run-time are of the most interest.
+
+    \original{
     Одной из~простейших моделей деформируемого тела является упоминавшаяся выше система масс
     и~пружин, в~которой тело представляется в~виде пространственной (как~правило, регулярной и
     кубической) решётки из~материальных точек, которые связаны между~собой пружинами, при~изменении длины
@@ -206,7 +253,21 @@
     используемого для его отображения (чаще всего это неравномерная поверхностная сетка из
     треугольников), в~равномерную объёмную решётку, а также подбирать большое число значений
     коэффициентов упругости пружин так, чтобы добиться требуемых свойств моделируемого материала.
+    }
 
+    One of the most simple models of deformable body is the aforementioned mass-spring system, in
+    which a body is represented as dimensional (usually, regular and cubical) grid of mass points,
+    which are connected with springs, acting according to Hooke's law. Being very simple for
+    implementation, this model, however, has some certain drawbacks. It models object behaviour not
+    very precise, and the result depends a lot on grid shape and spring locations, as well as on
+    spring constant values of each particular spring, which are not connected directly with real
+    properties of modeled material \cite[3.5.2]{mueller-physmodels}. Another flaw it that an
+    excitation applied locally spreads through object slowly, covering one step of the grid at a
+    step of the algorithm \cite[4.4.1]{parent-animation}. Moreover, additional work of converting
+    superficial mesh of triangles (a typical representation for 3D objects in software) into regular
+    grid and for adjusting spring constants.
+
+    \original{
     Принципиально другой подход реализуется в моделях, использующих метод конечных элементов, широко
     применяемый в~инженерных расчётах. При таком подходе
     непрерывные характеристики деформируемого тела вычисляются путём интерполяции их~значений
@@ -224,13 +285,21 @@
     и~т.п.), обеспечивающие в итоге правдоподобные деформации. Метод сопоставления формы, один из
     таких геометрических методов, описывается в работе~\cite{mueller-meshless}. Он имеет хорошее быстродействие,
     при этом обладая большей устойчивостью и простотой в конфигурации, чем системы масс и пружин.
+    }
 
-  \section{Постановка задачи}\label{sec:task}
+  \section{Statement of problem}\label{sec:task}
 
+    \original{
     Целью работы является разработка системы моделирования деформаций объектов для применения в
     приложениях виртуальной реальности: в компьютерных играх и обучающих тренажёрах.
     К~системе предъявляются следующие требования.
+    }
 
+    The goal of this work is development of the system for modeling deformation of bodies to be
+    applied in virtual reality applications: computer games and training simulators.
+    Following requirements should be met.
+
+    \original{
     Необходимо использовать сетки из треугольников в качестве внутреннего представления, либо
     предоставить возможность конвертации, поскольку в приложениях виртуальной реальности отображаемые объекты
     чаще всего представляются именно в таком формате. Это связано с~тем, что треугольник является
@@ -280,15 +349,23 @@
         \end{enumerate}
       \item Предусмотреть возможность использования параллельных вычислений.
     \end{enumerate}
+    }
 
-  \section{Моделирование деформаций}
+  \section{Modeling deformation}
 
+    \original {
     В этом разделе рассматриваются методы, используемые для решения поставленных задач. Описан выбор
     основного алгоритма для моделирования деформаций неупругих тел, сделанные в~нём изменения,
     а~также реализация дополнительных функций и применение параллельных вычислений.
+    }
 
-    \subsection{Основной алгоритм}\label{ssec:basic_algorithm}
+    In this section the methods used for solving the problems stated are considered. Described are
+    th chosen main algorithm for modeling plastic deformations of bodies, the improvements that were
+    made to it, as well as the implementation of additional features and the use of parallel computing
 
+    \subsection{Basic algorithm}\label{ssec:basic_algorithm}
+
+      \original{
       В разделе~\ref{sec:domain} были рассмотрены различные подходы к моделированию деформаций:
       система масс и пружин, упрощённый метод конечных элементов и геометрический метод
       сопоставления формы. В~частности, было показано, что использование системы масс и пружин
@@ -301,9 +378,11 @@
       реалистичным, нужно в каждом конкретном случае правильно подобрать параметры. Впрочем, число
       этих параметров меньше, чем в случае метода масс и пружин. Далее описан исходный алгоритм и
       изменения, которые были сделаны для его адаптации к текущей задаче.
+      }
 
-      \subsubsection{Исходный алгоритм}\label{sssec:original_algorithm}
+      \subsubsection{Original algorithm}\label{sssec:original_algorithm}
 
+        \original{
         \paragraph{Входные данные и результат.} Объект представляется в~виде набора точек,
         сгруппированных в~перекрывающиеся множества, называемые кластерами
         (информация о~связях между вершинами, то~есть об~образуемых ими полигонах, не требуется).
@@ -370,9 +449,11 @@
         \begin{equation}\label{eq:goal_pos}
           \vect{g}_i = \matx{A} \matx{S}^{ост} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.}.
         \end{equation}
+        }
 
-      \subsubsection{Предлагаемые изменения в алгоритме}\label{sssec:proposed_changes}
+      \subsubsection{Proposed changes of algorithm}\label{sssec:proposed_changes}
 
+        \original{
         В~исходный алгоритм вносятся изменения, адаптирующие его к~условиям данной
         задачи. Во-первых, моделирование неупругих тел требует демпфирования возникающих колебаний.
         Во-вторых, система отвечает только за~моделирование деформаций, а глобальное движение и
@@ -421,17 +502,21 @@
         После этого приложение, в которое встроена система, должно получить из неё значения
         $\vect{v}_{ц.м.}$ и $\vect{\omega}$ и скорректировать глобальное движение объекта, прибавив их
         к его линейной и угловой скоростям соответственно.
+        }
 
-    \subsection{Реализация дополнительных функций}
+    \subsection{Implementation of additional features}
 
+      \original{
       Как уже говорилось в разделе~\ref{sec:task}, кроме собственно моделирования деформаций, ядро
       системы предоставляет дополнительную функциональность, а именно, поддержку недеформируемых
       частей, получение информации о произошедших столкновениях и приложенных силах, обнаружение
       определённых событий и обновление отображаемой сетки. Предлагаемые способы
       реализации этих функций описаны далее.
+      }
 
-      \subsubsection{Поддержка недеформируемых частей}
+      \subsubsection{Support for undeformable parts}
 
+        \original{
         Имеется возможность задать множество вершин, сохраняющее свою форму~--- недеформируемую раму.
         Чтобы обеспечить это, используется та~же техника, что и в~алгоритме демпфирования,
         описанном в п.~\ref{sssec:proposed_changes}, только коэффициент $k$ в~\eqref{eq:damping}
@@ -439,9 +524,11 @@
         подавляются полностью. Это действие необходимо также производить на каждом шаге, после
         интегрирования скоростей, но до~демпфирования, иначе из-за порождённых колебаний система
         может стать нестабильной.
+        }
 
-      \subsubsection{Получение информации о внешних воздействиях}\label{sssec:external_forces}
+      \subsubsection{Obtaining information about external forces}\label{sssec:external_forces}
 
+        \original{
         Деформация объекта происходит по причине внешних воздействий на него, наиболее интересными
         из которых являются столкновения~--- они и приводят к наибольшим деформациям. Количественно
         столкновение может быть задано как~в виде силы, действующей в~течение определённого времени, так и
@@ -450,9 +537,11 @@
         того, какой способ задания столкновений в~нём используется.
         Любое внешнее воздействие оказывается локально, поэтому необходимо также указать область,
         в~которой оно действует.
+        }
 
-      \subsubsection{Обнаружение произошедших событий}\label{sssec:events}
+      \subsubsection{Detecting events}\label{sssec:events}
 
+        \original{
         Следствием деформации объекта в~приложениях виртуальной реальности является не только
         изменение формы его отображаемой модели. Типичные события и их последствия могут быть
         наглядно продемонстрированы на примере автомобильного симулятора. Хрупкие объекты, такие как
@@ -499,9 +588,11 @@
         в~случае с определением отклонения от начальной формы, описанным выше, перед проверкой на принадлежность
         области необходимо подвергнуть позицию вершины смещению и повороту, обратным к смещению и
         повороту рамы.
+        }
 
-      \subsubsection{Поддержка высокополигональных сеток}\label{sssec:hi-poly}
+      \subsubsection{Support for high-polygonal meshes}\label{sssec:hi-poly}
 
+        \original {
         \paragraph{Преобразование позиций.}
         Отображение деформаций низкополигональной физической модели объекта на высокополигональную
         отображаемую сетку реализуется с~использованием того, что остаточная деформация кластера и
@@ -582,9 +673,11 @@
         обновления отображаемой сетки. В~обоих случаях вместе с~указателем на массив вершин
         передаётся описатель вершины, который используется для индексирования этого массива и
         доступа к~хранящимся в~вершине данным.
+        }
 
-    \subsection{Параллельные вычисления}\label{ssec:parallel}
+    \subsection{Parallel computing}\label{ssec:parallel}
 
+      \original{
       В разделе~\ref{sec:task} было сказано, что одной из задач, поставленных в данной работе, является эффективное использование
       мощности многоядерных процессоров за счёт применения параллельных вычислений.
       Это актуально, поскольку многоядерные процессоры
@@ -598,9 +691,11 @@
       % параллельных вычислений нужно применить метод А. Но ведь есть ещё целая куча других моделей
       % параллельных вычислений (не только задачи). Сети петри, там, можешь ещё про Axum почитать ;)
       % Тут надо либо аккуратно окучить тему, либо чётко описать, почему именно используются задачи.
+      }
 
-      \subsubsection{Разбиение алгоритма на задачи}\label{sssec:parallel_tasks}
+      \subsubsection{Splitting algorithm into tasks}\label{sssec:parallel_tasks}
 
+        \original{
         Основной алгоритм содержит этап, состоящих из независимых однотипных блоков
         действий~--- это выполнение сопоставления формы для каждого кластера. Входными данными для
         сопоставления формы являются текущие позиции вершин, и они не изменяются в процессе
@@ -613,9 +708,11 @@
         обработки всего объекта>>. Поскольку матрицы, входящие
         в~формулу \eqref{eq:graphical_pos}, к началу работы над задачей обработки всего объекта уже вычислены,
         расчёт деформации отображаемой сетки может производиться параллельно выполнению этой задачи.
+        }
 
-      \subsubsection{Менеджер задач}\label{sssec:task_manager}
+      \subsubsection{Task manager}\label{sssec:task_manager}
 
+        \original{
         За параллельное выполнение задач и соблюдение порядка, в котором они должны начинать
         исполнение, отвечает менеджер задач. При разработке компонента
         для приложения виртуальной реальности нужно учитывать, что в~этом приложении
@@ -628,9 +725,11 @@
         функционирующий корректно при одновременном доступе из нескольких потоков. Далее такой
         интерфейс называется <<потокобезопасной очередью задач>>. Под очередью здесь понимается именно строгий порядок выдачи
         задач на исполнение, завершение предыдущей задачи для начала выполнения следующей не требуется.
+        }
 
-      \subsubsection{Использование графического процессора}\label{sssec:using_gpu}
+      \subsubsection{Using graphical processor}\label{sssec:using_gpu}
 
+        \original{
         Графический процессор входит во все современные видеоадаптеры и предназначен, в
         первую очередь, для ускорения процесса получения изображения трёхмерной сцены. Современные
         графические процессоры обладают высокой вычислительной мощностью и позволяют выполнять
@@ -698,9 +797,11 @@
         поддерживает произвольное число кластеров, количество доступных регистров для констант
         шейдера накладывает на него ограничение, которое должно быть учтено пользователем системы.
         Подробнее эта проблема рассмотрена в п.~\ref{sssec:limitations}.
+        }
 
-  \section{Реализация системы}
+  \section{System implementation}
 
+    \original{
     Система реализуется в~виде модуля, который может быть встроен в~приложение виртуальной
     реальности: статической либо динамической библиотеки, написанной на языке C++. Выбор языка
     обоснован компромиссом между быстродействием и удобством разработки и интеграции, которые
@@ -974,7 +1075,7 @@
           \item Вызов действия (используется внутри системы): метод invoke.
         \end{enumerate}
 
-  \section{Тестирование системы}
+  \section{Testing}
 
       Корректность работы системы была протестирована на двух уровнях: на уровне отдельных функций и на
       уровне системы в~целом. Для тестирования отдельной функции применяется модульное тестирование (англ. \eng{unit testing}):
@@ -991,9 +1092,11 @@
       человеком, разработано простое интерактивное приложение, позволяющее пользователю подвергать
       тестовый объект различным воздействиям и наблюдать изменения, происходящие при этом с
       трёхмерной моделью объекта.
+      }
 
-  \section{Результаты}\label{sec:results}
+  \section{Results}\label{sec:results}
 
+    \original{
     Система моделирования деформаций была реализована в~виде статической
     библиотеки объектных модулей, написанной на языке C++. Было разработано тестовое приложение,
     использующее эту библиотеку, которое средствами API DirectX~9 отображает трёхмерную модель
@@ -1335,9 +1438,11 @@
     будет разработан собственный формата файла для хранения этих параметров, разбор которого будет
     осуществляться внутри данной системы. Это позволит применять систему в~реальных приложениях
     виртуальной реальности, которые обычно содержат множество разнообразных деформируемых объектов.
+    }
 
-  \section{Заключение}\label{sec:conclusion}
+  \section{Conclusion}\label{sec:conclusion}
 
+    \original{
     % TODO Можно цифры ещё сюда
     В данной работе ставилась цель разработать систему моделирования деформаций неупругих тел
     в~реальном времени, ориентированную на применение в~приложениях виртуальной реальности. Эта цель
@@ -1355,13 +1460,10 @@
     Также были исследованы возможности дальнейшего развития и улучшения системы. В частности, планируется разработка
     дополнительных инструментов, упрощающих использование системы разработчиками приложений
     виртуальной реальности.
+    }
 
   \begin{flushleft}
     \bibliography{../../biblio/my}
-
-    \vspace{2cm}
-    Студент 4 курса ФФ НГУ\\
-    Новиков Иван Александрович
   \end{flushleft}
 \end{document}
 
