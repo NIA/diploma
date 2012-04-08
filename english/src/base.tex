@@ -92,6 +92,10 @@
 
   \newcommand{\checkdate}[3]{({accessed at: \formatdate{#1}{#2}{#3}})}
 
+  \newenvironment{firstpage}%
+    {\thispagestyle{empty} \begin{center} \large}
+    {\end{center} \newpage}
+
   \author{Ivan Novikov, NSU Physics Department, group 7355}
   \title{A system for modeling plastic deformations of body in real-time}
 
@@ -99,25 +103,26 @@
 
 %----------------------- титульный лист ------------------------
 
-  \thispagestyle{empty}
-  \begin {center}
-  Ministry of Education of Russia
+  \begin{firstpage}
+  MINISTRY OF EDUCATION AND SCIENCE
+
+  RUSSIAN FEDERATION
 
   \vspace{0.3cm}
 
-  Novosibirsk State University
+  NOVOSIBIRSK STATE UNIVERSITY
 
   \vspace{1.6cm}
 
-  Physics department
+  PHYSICS DEPARTMENT
 
   \vspace {0.5cm}
 
-  Automation of research physics and technology chair
+  AUTOMATION OF PHYSICS AND TECHICAL RESEARCH CHAIR
 
   \vspace {5cm}
 
-  Report
+  Qualification Work on Bachelor Degree
 
   \vspace {1cm}
 
@@ -131,16 +136,16 @@
 
   \begin{flushright}
 
-    Supervisor:
+    Scientific Advisor:
 
     Dennis Gladky
 
   \end{flushright}
 
-  \vspace {7cm}
+  \vspace {6cm}
 
-  Novosibirsk, 2012
-  \end {center}
+  Novosibirsk 2012
+  \end{firstpage}
 
 %------------------------- содержание -------------------------
 
