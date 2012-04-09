@@ -62,11 +62,11 @@
     \subfloat[#2]{\label{fig:#3}\includegraphics[#1]{#3}}
   }
 
-  \newcommand{\vect}[1]{\vec{#1}} % единое выделение векторов (стрелкой)
+  \newcommand{\vect}[1]{\mathbf{#1}} % единое выделение векторов (полужирным)
   \newcommand{\matx}[1]{\mathbf{#1}} % единое выделение матриц (полужирным)
   \newcommand{\transposed}{\top} % единый знак транспонирования (U+22A4 down tack)
-  \renewcommand{\le}{\leqslant} % <= с наклонной нижней перекладиной
-  \renewcommand{\ge}{\geqslant} % >= с наклонной нижней перекладиной
+  % \renewcommand{\le}{\leqslant} % <= с наклонной нижней перекладиной
+  % \renewcommand{\ge}{\geqslant} % >= с наклонной нижней перекладиной
 
   \linespread{1.0}
 
@@ -269,7 +269,7 @@
     which a body is represented as dimensional (usually, regular and cubical) grid of mass points,
     which are connected with springs, acting according to Hooke's law. Being very simple for
     implementation, this model, however, has some certain drawbacks. It models object behaviour not
-    very precise, and the result depends a lot on grid shape and spring locations, as well as on
+    very precise, and the result depends significantly on the grid shape and spring locations, as well as on
     spring constant values of each particular spring, which are not connected directly with real
     properties of modeled material \cite[sec. 3.5.2]{mueller-physmodels}. Another flaw it that an
     excitation applied locally spreads through object slowly, covering one step of the grid at a
@@ -291,7 +291,7 @@
 
     Fundamentally different approach is implemented in the models that use Finite Element Method
     which is widely applied for engineering calculations. In this approach continuous parameters of
-    deformable body are found by interpolation of their values on elements of finite size.
+    deformable body are found by interpolation of their values over the elements of finite size.
     Naturally, this method cannot be used as it is in virtual reality applications, because
     engineering calculations may last some hours or even days. However, the models exist which
     propose different simplifications of this method, making real-time computation possible.
@@ -341,7 +341,7 @@
     Triangle meshes should be used as internal representation, or the possibility of conversion from
     such format should be available, because it is a common way of representing visible objects in
     virtual reality applications. That is because triangle is one of the basic geometric primitives
-    for graphical processors.~\cite{nvidia-tutorial}
+    for graphical processors~\cite{nvidia-tutorial}.
 
     \begin{original}
     Система должна иметь достаточное быстродействие, чтобы обеспечивать моделирование в~реальном
@@ -400,7 +400,8 @@
     \end{original}
 
     Finally, the interface of the system should not create difficulties during its integration into
-    virtual reality applications. The basic criteria to be followed are described in~\cite{gems-middleware}.
+    virtual reality applications. The application which the system is integrated into is further called
+    the \emph{host application}. The basic criteria to be followed are described in~\cite{gems-middleware}.
     They include, in particular, configurable error handling, logging and memory management, as well
     as refusing from direct access to file systems in favour of working with in-memory buffers.
     Moreover, dependence on specific implementations of synchronization primitives and thread
@@ -449,9 +450,9 @@
     а~также реализация дополнительных функций и применение параллельных вычислений.
     \end{original}
 
-    In this section the methods used for solving the problems stated are considered. Described are
-    th chosen main algorithm for modeling plastic deformations of bodies, the improvements that were
-    made to it, as well as the implementation of additional features and the use of parallel computing
+    In this section the methods are considered which are used for solving the stated problem. Described are
+    the main algorithm chosen for modeling plastic deformations of bodies, the improvements that were
+    made to it, as well as the implementation of additional features and the use of parallel computing.
 
     \subsection{Basic algorithm}\label{ssec:basic_algorithm}
 
@@ -470,6 +471,20 @@
       изменения, которые были сделаны для его адаптации к текущей задаче.
       \end{original}
 
+      In the section~\ref{sec:domain} different approaches to modelling deformations were
+      considered. They include a~mass-spring system, a~simplified finite elements method and
+      a~geometric method of shape matching. In particular, it was shown that using mass-spring
+      systems is concerned with the need for considerable transformation of object format and for
+      selection of many coefficients which are not derived directly from the properties of the
+      modelled material. A simplified finite element method, on the contrary, operates real
+      continuous properties of the material and thus simulates deformations in a very realistic way,
+      but it is not fast enough. That is why in this work the choice was made in favor of shape
+      matching method proposed in~\cite{mueller-meshless}. It works much faster but in order to make
+      simulation realistic it is necessary to correctly adjust parameters for each particular case.
+      Nevertheless, the number of these parameters is less than in case of a mass-spring system.
+      Described below are the original algorithm of shape matching and the changes made to adapt it
+      for current task.
+
       \subsubsection{Original algorithm}\label{sssec:original_algorithm}
 
         \begin{original}
@@ -479,7 +494,16 @@
         На~вход алгоритма поступает заданный таким образом объект, а так же информация о~приложенных
         силах. Задаётся величина шага по времени. Результатом выполнения одной итерации алгоритма
         являются позиции точек, задающих объект, в следующий момент времени.
+        \end{original}
 
+        \paragraph{Input and output.} An object is represented by an array of points, grouped into
+        overlapping sets here called clusters. Therefore, the information about connections between
+        vertices is not required. An object represented this way is given to the algorithm as the
+        input, as well as the information about applied forces. Time step value is set. The results
+        of single iteration of algorithm are positions of points representing object at the next
+        instant of time.
+
+        \begin{original}
         \paragraph{Общая схема алгоритма.} Скорости и позиции этих материальных точек интегрируются независимо
         друг от друга, для чего используется явная схема Эйлера. Затем над каждым кластером
         производится операция сопоставления формы: вычисляется новое положение центра масс кластера
@@ -498,19 +522,59 @@
           \matx A = \left( \sum_i m_i \vect{p}_i \vect{q}_i^\transposed \right)
                     \left( \sum_i m_i \vect{q}_i \vect{q}_i^\transposed \right)^{-1}.
         \end{equation}
+        \end{original}
+
+        \paragraph{General scheme of the algorithm.} Velocities and positions of these mass-points
+        are integrated regardless of each other using explicit Euler method. Then each cluster is
+        subjected to shape matching operation: a new position of the center of mass of the cluster
+        is found, as well as an optimal linear transformation $\matx A$ which converts the initial
+        shape of the cluster into the closest to the current shape. Let $\vect{x}^0_i$ and
+        $\vect{x}_i$ be the initial and the current position of $i^{th}$ point, $\vect{x}^0_{c.m.}$
+        and $\vect{x}_{c.m.}$ be the initial and the current center of mass of the cluster. By
+        $\vect{q}_i = \vect{x}^0_i - \vect{x}^0_{c.m.}$ and $\vect{p}_i = \vect{x}_i -
+        \vect{x}_{c.m.}$ denote the initial and the current offset of point relative to the center
+        of mass of the cluster. As a criteria of optimality for the transformation $\matx A$ used is
+        the sum of squared differences between transformed initial positions and current positions:
+        $\sum_i m_i (\matx A \vect{q}_i - \vect{p}_i )^2$. It was shown in~\cite{mueller-meshless}
+        that this term is maximized when
+        \begin{equation}
+          \matx A = \left( \sum_i m_i \vect{p}_i \vect{q}_i^\transposed \right)
+                    \left( \sum_i m_i \vect{q}_i \vect{q}_i^\transposed \right)^{-1}.
+        \end{equation}
+
+        \begin{original}
         После того как оптимальное преобразование $\matx A$ найдено, для каждой точки определяется
         положение, которое она имела бы, если бы изменение формы кластера в~точности определялось этим
         преобразованием, с~учётом смещения центра масс:
         \begin{equation}
-          \vect{g}_i = \matx{A} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.},
+          \vect{g}_i = \matx{A} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.}.
         \end{equation}
+        \end{original}
+
+        Once the optimal transformation $\matx A$ of the cluster is found, the goal position is
+        calculated for each point which belongs to it. The \emph{goal position} of a point is a
+        position which it would have if the change of cluster's shape was defined exactly by the
+        transformation $\matx A$. The change of the center of mass is also taken into account:
+        \begin{equation}
+          \vect{g}_i = \matx{A} (\vect{x}^0_i - \vect{x}^0_{c.m.}) + \vect{x}_{c.m.}.
+        \end{equation}
+
+        \begin{original}
         Далее $\vect{g}_i$ называется целевой позицией точки. Для каждой точки, исходя из величины
         отклонения её текущей позиции от~целевой, рассчитывается поправка к~скорости, корректирующая
         это отклонение. Если точка входит одновременно в~несколько кластеров, то~есть находится
         в~зоне их перекрытия, корректирующие поправки от~каждого из~кластеров усредняются, что
         обеспечивает целостность объекта: за~счёт этого кластеры, обрабатываемые независимо,
         не~отделяются друг от~друга.
+        \end{original}
 
+        For each point of the cluster an amendment to its velocity is calculated which corrects the
+        deviation of the current position from the goal position. If the point is included in more
+        than one cluster (that is, belongs to their intersection) then the amendments from different
+        clusters are averaged. This ensures integrity of the object: due to that fact the clusters
+        do not separate from each other although they are handled independently.
+
+        \begin{original}
         \paragraph{Остаточная деформация.} Для моделирования неупругости остаточная деформация
         каждого кластера сохраняется в~форме линейного преобразования $\matx{S}^{ост}$, то~есть
         матрицы $3 \times 3$. Изначально она единичная, а~изменение происходит, лишь когда мера
@@ -518,7 +582,7 @@
         использована $ \|\matx S - \matx E\|_2 $, где $\matx S$~--- симметричная компонента $\matx
         A$, $\matx E$~--- единичная матрица, норма Фробениуса $\|\matx M\|_2 = \sqrt{\sum_{i, j} |m_{ij}|^2}$.
         Симметричная матрица $\matx S$ получается при полярном разложении матрицы $\matx A$:
-        \begin{equation}\label{eq:polar_decomposition}
+        \begin{equation}
           \matx A = \matx R \matx S,
         \end{equation}
         где $\matx R$~--- ортогональная матрица. Выбор именно симметричной компоненты обусловлен
@@ -536,10 +600,40 @@
         с текущими при сопоставлении формы, преобразуются матрицей $\matx{S}^{ост}$. Таким
         образом, сопоставление происходит не с~исходной, а с деформированной формой. Кроме того, формула для
         расчёта целевых позиций принимает следующий вид:
-        \begin{equation}\label{eq:goal_pos}
+        \begin{equation}
           \vect{g}_i = \matx{A} \matx{S}^{ост} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.}.
         \end{equation}
         \end{original}
+
+        \paragraph{Residual deformation.} To simulate inelasticity the residual deformation of each
+        cluster is saved in the form of a linear transformation $\matx{S,}^{\!\!res}$ that is, in the
+        form of a $3 \times 3$ matrix. Initially, it is a unity matrix and it is changed only when
+        the measure of deformation exceeds a predefined threshold value $d_{inelast}$. A possible
+        measure of deformation is $ \|\matx S - \matx E\|_2 $, where $\matx S$ is a symmetric
+        component of $\matx A$, $\matx E$ is a unity matrix, and the matrix norm is the Frobenius
+        norm which is defined as follows: $\|\matx M\|_2 = \sqrt{\sum_{i, j} |m_{ij}|^2}$. The
+        symmetric matrix $\matx S$ is obtained via polar decomposition of the matrix $\matx A$:
+        \begin{equation}\label{eq:polar_decomposition}
+          \matx A = \matx R \matx S,
+        \end{equation}
+        where $\matx R$ is an orthogonal matrix. The choice of symmetric component is determined by
+        the fact that it doesn't include rotations. Rotations doesn't change shape and thus should
+        not be considered in the measure of deformation. When the described measure exceeds $d_{inelast}$
+        the matrix $\matx{S}^{res}$ should update in order to save a portion of current deformation:
+        \begin{equation}
+          \matx{S}^{res} = \left(E + u \Delta t (\matx S - \matx E) \right) \matx{S}^{res}.
+        \end{equation}
+        Here $\Delta t$ is a time step, and the parameter $u$ describes how fast residual
+        deformation is changed. Maximum residual deformation is limited: when
+        $\|\matx{S}^{res} - \matx E\|_2$ reaches extreme value of $d_{max}$ the matrix
+        $\matx{S}^{res}$ ceases to change. Residual deformation is then taken into account during
+        shape matching and computing goal positions. To be exact, initial positions are transformed
+        by the matrix $\matx{S}^{res}$ before they are compared to current positions. Thus,
+        matching is made to deformed shape instead of the initial one. Besides, the formula for goal
+        positions becomes as follows:
+        \begin{equation}\label{eq:goal_pos}
+          \vect{g}_i = \matx{A} \matx{S}^{res} (\vect{x}^0_i - \vect{x}^0_{c.m.}) + \vect{x}_{c.m.}.
+        \end{equation}
 
       \subsubsection{Proposed changes of algorithm}\label{sssec:proposed_changes}
 
@@ -551,7 +645,17 @@
         Поэтому расчёт деформаций необходимо производить в~локальных координатах~---
         в~неинерциальной системе отсчёта, связанной с центром масс объекта, в которой он не
         движется и не вращается. Далее для краткости она называется системой центра масс.
+        \end{original}
 
+        The changes are made to the basic algorithm in order to adapt it to the current conditions.
+        First, simulation of inelastic bodies requires damping of arising oscillations. Second, the
+        system is responsible for modeling only deformations, while global motion and collision
+        detection are computed separately in the host application. Consequently, the computation of
+        deformations should be made in local coordinates: in a non-inertial reference frame
+        associated with the center of mass of the object where it neither move or rotate. Further
+        this reference frame is called the \emph{center-of-momentum frame.}
+
+        \begin{original}
         \paragraph{Демпфирование.} Чтобы поведение неупругого тела выглядело правдоподобно,
         нужно, чтобы затухали только колебания, а глобальное движение тела сохраняло свои характеристики.
         Для этого используется способ, описанный в~\cite[подраздел~3.5]{mueller-position-dynamics}. Сначала выделяется
@@ -571,16 +675,47 @@
         \end{eqnarray*}
         Для каждой вершины определяется скорость,
         которую она имела~бы, если~бы тело было абсолютно твёрдым:
-        \begin{equation}\label{eq:rigid_velocity}
+        \begin{equation}
           \vect{u}_i = v_{ц.м.} + \omega \times (\vect{x}_i - \vect{x}_{ц.м.}).
         \end{equation}
         Демпфированию подвергается только индивидуальное отклонение скорости вершины
         $\Delta \vect{v}_i = \vect{v}_i - \vect{u}_i$:
-        \begin{equation}\label{eq:damping}
+        \begin{equation}
           \vect{v}_i = \vect{v}_i - k \Delta \vect{v}_i,
         \end{equation}
         где $k \in [0, 1]$. За счёт этого $\vect{v}_{ц.м.}$ и $\vect{\omega}$ сохраняются.
+        \end{original}
 
+        \paragraph{Damping.}
+        In order that the behavior of inelastic body looks plausible it is necessary that only
+        oscillations are damped while global motion conserves its parameters. For that used is the
+        method described in~\cite[sec.~3.5]{mueller-position-dynamics}. At first the motion of the
+        body as a whole is singled out: the velocity of the center of mass $\vect{v}_{c.m}$ and the
+        angular velocity $\vect{\omega}$ are computed. In order to do this the center of mass and
+        the moment of inertia tensor $\matx I$ (a $3 \times 3$ matrix) are found:
+        \begin{eqnarray*}
+          \vect{x}_{c.m.} & = & \frac{\sum_i m_i \vect{x_i}}{\sum_i m_i},\\
+          \vect{r}_i      & = & \vect{x}_i - \vect{x}_{c.m.},\\
+          \matx{I}        & = & \sum_i m_i ( |\vect{r}_i|^2 \matx E - \vect{r}_i \vect{r}_i^\transposed),\\
+        \end{eqnarray*}
+        where $\matx E$ is a $3 \times 3$ unity matrix. Then the mentioned velocities are computed:
+        \begin{eqnarray*}
+          \vect{v}_{c.m.} & = & \frac{\sum_i m_i \vect{v_i}}{\sum_i m_i},\\
+          \vect{L}        & = & \sum_i \vect{r}_i \times (m_i \vect{v}_i),\\
+          \vect{\omega}   & = & \matx{I}^{-1} \vect{L}.
+        \end{eqnarray*}
+        For each vertex computed is the velocity which it would have if the body was absolutely rigid:
+        \begin{equation}\label{eq:rigid_velocity}
+          \vect{u}_i = v_{c.m.} + \omega \times (\vect{x}_i - \vect{x}_{c.m.}).
+        \end{equation}
+        Only individual deviations of vertex velocity $\Delta \vect{v}_i = \vect{v}_i - \vect{u}_i$
+        are subjected to damping:
+        \begin{equation}\label{eq:damping}
+          \vect{v}_i = \vect{v}_i - k \Delta \vect{v}_i,
+        \end{equation}
+        where $k \in [0, 1]$. Therefore, $\vect{v}_{c.m.}$ and $\vect{\omega}$ are conserved as necessary.
+
+        \begin{original}
         \paragraph{Расчёт в локальных координатах.} Проблема, возникающая при расчёте деформаций в
         системе центра масс, заключается в том, что вследствие удара или воздействия внешних сил
         у~тела может появиться как ненулевая скорость центра масс, так и ненулевая угловая скорость.
@@ -594,6 +729,19 @@
         к его линейной и угловой скоростям соответственно.
         \end{original}
 
+        \paragraph{Computing in local coordinates.} The problem which appears when deformations are
+        computed in the center-of-momentum frame is as following. As a result of a stroke or
+        external forces effect, a non-zero velocity of the center of mass of body may appear, as well as
+        non-zero angular velocity. Thus, the named reference frame will no longer be the
+        center-of-momentum frame. That is why the correction is made after integrating velocities
+        and before integrating positions of vertices. $\vect{v}_{c.m.}$ and $\vect{\omega}$ acquired
+        during the present step are already calculated during the computation of damping. In order to
+        return back to the center-of-momentum frame again it is required to compensate these
+        velocities. It is done by subtracting $\vect{u}_i$ defined in \eqref{eq:rigid_velocity} from
+        the velocity of $i^{th}$ vertex, consequently for each vertex. After that the host
+        application should get the values of $\vect{v}_{c.m.}$ and $\vect{\omega}$ and correct the
+        global motion of the object by adding them to its linear and angular velocities, correspondingly.
+
     \subsection{Implementation of additional features}
 
       \begin{original}
@@ -603,6 +751,12 @@
       определённых событий и обновление отображаемой сетки. Предлагаемые способы
       реализации этих функций описаны далее.
       \end{original}
+
+      As it was already mentioned in section~\ref{sec:task}, the core of the system provides
+      an additional functionality besides modelling deformation. This includes support for
+      undeformable parts, obtaining information about happened collisions and applied forces,
+      detection of certain events and updating the displayed mesh. Proposed means of implementation
+      of these functions are described below.
 
       \subsubsection{Support for undeformable parts}
 
@@ -616,7 +770,15 @@
         может стать нестабильной.
         \end{original}
 
-      \subsubsection{Obtaining information about external forces}\label{sssec:external_forces}
+        It is required to provide the ability to define a set of vertices which saves its shape:
+        a~\emph{rigid frame}. The same technique is used here as in the damping algorithm described
+        in sec.~\ref{sssec:proposed_changes}. The only difference is that the factor $k$
+        in~\eqref{eq:damping} is assumed to be equal to 1. That is, the individual deviations of
+        velocities are suppressed entirely. This action should be also done at each step after
+        integrating velocities but before damping. Otherwise the simulation may become unstable due
+        to the oscillations caused by this interference.
+
+      \subsubsection{Obtaining information about external actions}\label{sssec:external_forces}
 
         \begin{original}
         Деформация объекта происходит по причине внешних воздействий на него, наиболее интересными
@@ -628,6 +790,13 @@
         Любое внешнее воздействие оказывается локально, поэтому необходимо также указать область,
         в~которой оно действует.
         \end{original}
+
+        Deformation of the object is caused by external actions, collisions being the most
+        interesting of them, since they cause the most strong deformation. Quantitatively the
+        collision may be defined either as a force acting during definite short time span, or as a
+        change of momentum which is imparted instantly to the object. The system supports both
+        formats thus being applicable independent on the variant used in the host application. Any
+        external action is local, so in both cases the region of the action is also indicated.
 
       \subsubsection{Detecting events}\label{sssec:events}
 
@@ -648,12 +817,16 @@
         \end{enumerate}
         Способ обнаружения каждого из событий описан далее. Интерфейс для уведомления об
         обнаруженном событии рассматривается в п.~\ref{sssec:reactions}.
+        \end{original}
 
+        \begin{original}
         \paragraph{Удар в заданную область.}
         Простейшее событие~--- это удар в некоторую область, заданную массивом индексов
         входящих в~неё вершин. Для его определения нужно лишь проверить, входит ли хоть одна из этих
         вершин в~зону действия удара и превышает~ли изменение её скорости пороговую величину.
+        \end{original}
 
+        \begin{original}
         \paragraph{Отклонение от начальной формы.}
         Для определения таких событий необходимо отдельно хранить начальную позицию каждой вершины.
         То, что вычисления производятся в~системе центра масс, упрощает определение
