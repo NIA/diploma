@@ -4,7 +4,7 @@
   \usepackage{mathtext} % для кириллицы в формулах
   \usepackage[T2A]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage[english,russian]{babel}
+  \usepackage[english]{babel}
   \usepackage{indentfirst}
   \usepackage{cite}
   \usepackage{amsmath} % для \eqref
@@ -16,17 +16,19 @@
   \usepackage{numprint}
   \usepackage[left=3cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
   \usepackage{datetime}
+  \usepackage{comment}
+  \usepackage{datetime}
   \graphicspath{{../img/}{../../img/}}
   \frenchspacing
 
   \DeclareSymbolFont{T2Aletters}{T2A}{cmr}{m}{it} % кириллица в формулах курсивом
 
-  %\addto\captionsrussian{
+  \addto\captionsenglish{
     %\renewcommand\contentsname{Содержание}
     % перекрываю \refname, чтобы список литературы сам добавлял себя в оглавление
     \let\oldrefname\refname
     \renewcommand\refname{\addcontentsline{toc}{section}{\oldrefname}\oldrefname}
-  %}
+  }
 
   \newcommand{\underscore}[1]{\hbox to#1{\hrulefill}}
   \newcommand{\todo}[1]{\textbf{\textcolor{red}{TODO: #1}}}
@@ -34,11 +36,15 @@
   \newcommand{\eng}[1]{#1}
   \newcommand{\rus}[1]{{\Russian #1}}
 
-  \newenvironment{original}{%
+  \specialcomment{original}{%
+     \begingroup
      \itshape
      \color{blue}
-     \Russian
-  }{}
+     %\Russian
+  }{
+    \endgroup
+  }
+  \excludecomment{original} % скрывает текст внутри окружения original
 
   % обёртка с моими настройками поверх figure:
   % \begin{myfigure}{подпись}{fig:label} ... \end{myfigure}
@@ -90,14 +96,15 @@
   \npthousandthpartsep{}
   \npdecimalsign{,}
 
-  \newcommand{\checkdate}[3]{({accessed at: \formatdate{#1}{#2}{#3}})}
+  \shortdate
+  \newcommand{\checkdate}[3]{(accessed at: \formatdate{#1}{#2}{#3})}
 
   \newenvironment{firstpage}%
     {\thispagestyle{empty} \begin{center} \large}
     {\end{center} \newpage}
 
   \author{Ivan Novikov, NSU Physics Department, group 7355}
-  \title{A system for modeling plastic deformations of body in real-time}
+  \title{A system for modelling plastic deformations of body in real-time}
 
 \begin{document}
 
@@ -156,14 +163,14 @@
 %-------------------------- введение --------------------------
   \section{Introduction}
 
-    \begin{original}
+\begin{original}
     Приложения виртуальной реальности становятся чрезвычайно рас\-прос\-тра\-нён\-ны\-ми в~наши~дни.  Два
     основных их типа~--- это компьютерные игры и~обучающие симуляторы (тренажёры). Несмотря на
     различные применения, эти два типа приложений имеют много общего, поскольку в~обоих случаях
     требуется создать иллюзию присутствия у~пользователя. Для~этого необходимо как генерировать
     фотореалистичные изображения, так и правдоподобно моделировать физику взаимодействия объектов
     виртуального мира: их движение, столкновения, деформации и~разрушение.
-    \end{original}
+\end{original}
 
     Virtual reality applications become extremely wide-spread nowadays. Two basic types of such
     applications are computer games and training simulators. Despite of different uses, this two
@@ -172,7 +179,7 @@
     interactions of virtual world objects (their motion, collisions, deformations and destruction)
     in a verisimilar manner.
 
-    \begin{original}
+\begin{original}
     Моделирование деформаций объектов является актуальной задачей, поскольку кроме приложений
     виртуальной реальности оно находит применение в~системах автоматизированного проектирования, а~также используется
     при~создании спецэффектов к~фильмам. В зависимости от поставленной задачи применяются различные
@@ -182,7 +189,7 @@
     выполняться длительное время, то в~интерактивных приложениях расчёт одного шага вычислений должен
     происходить не~дольше, чем за~промежуток между кадрами, чтобы обеспечивать плавную анимацию
     и отсутствие задержек между воздействием на объект и его деформацией.
-    \end{original}
+\end{original}
 
     Modeling deformations is a topical problem, since besides virtual reality applications it is
     applied in Computer Aided Design (CAD) systems and for making special effects for motion
@@ -193,7 +200,7 @@
     applications should take no longer than inter-frame interval to ensure smooth animation and
     eliminate lags between interaction with an object and its deformation.
 
-    \begin{original}
+\begin{original}
     Жёсткое требование быстродействия в приложениях реального времени не~только вынуждает
     использовать упрощённые физические модели деформации тела, менее точные, чем используемые
     в~инженерных расчётах, но и накладывают существенные ограничения на способ представления
@@ -206,7 +213,7 @@
     современных настольных компьютерах и компьютерах, используемых в тренажёрах. Из-за этого
     невозможно использовать одно и~то~же представление объекта и для моделирования, и для
     отображения.
-    \end{original}
+\end{original}
 
     Severe performance requirements of virtual reality applications not only makes developers use
     simplified physical models of deformations, but also significantly limits the way of
@@ -222,7 +229,7 @@
 
   \section{Overview of the subject area}\label{sec:domain}
 
-    \begin{original}
+\begin{original}
     Существуют различные подходы к~моделированию деформаций в~реальном времени. В простейшем случае
     ограничения на~быстродействие алгоритма обходятся за счёт использования предварительно рассчитанных
     деформированных состояний для~некоторого конечного набора возможных ударов по~объекту, одно из которых
@@ -235,7 +242,7 @@
     для предварительных расчётов после каждого изменения объекта, прежде чем он может быть загружен
     в приложение для тестирования, создаёт неудобства при разработке приложения. Поэтому наибольший
     интерес представляют решения, в которых моделирование деформаций происходит во время исполнения.
-    \end{original}
+\end{original}
 
     There are different approaches to modeling of deformations in real-time. In the simplest case
     performance limitations can be left out by using precomputed deformed states for some limited
@@ -248,7 +255,7 @@
     considerable time required for preliminary computations creates inconveniences in the process of
     development. So the algorithms of simulating deformations at run-time are of the most interest.
 
-    \begin{original}
+\begin{original}
     Одной из~простейших моделей деформируемого тела является упоминавшаяся выше система масс
     и~пружин, в~которой тело представляется в~виде пространственной (как~правило, регулярной и
     кубической) решётки из~материальных точек, которые связаны между~собой пружинами, при~изменении длины
@@ -263,7 +270,7 @@
     используемого для его отображения (чаще всего это неравномерная поверхностная сетка из
     треугольников), в~равномерную объёмную решётку, а также подбирать большое число значений
     коэффициентов упругости пружин так, чтобы добиться требуемых свойств моделируемого материала.
-    \end{original}
+\end{original}
 
     One of the most simple models of deformable body is the aforementioned mass-spring system, in
     which a body is represented as dimensional (usually, regular and cubical) grid of mass points,
@@ -277,7 +284,7 @@
     superficial mesh of triangles (a typical representation for 3D objects in software) into regular
     grid and for adjusting spring constants to achieve required properties of modelled material.
 
-    \begin{original}
+\begin{original}
     Принципиально другой подход реализуется в моделях, использующих метод конечных элементов, широко
     применяемый в~инженерных расчётах. При таком подходе
     непрерывные характеристики деформируемого тела вычисляются путём интерполяции их~значений
@@ -287,7 +294,7 @@
     методов, которые допускают вычисление в реальном времени, как, например, в работе~\cite{mueller-stable}.
     Деформации при этом моделируются намного точнее, чем в случае системы масс и пружин, но даже
     упрощённый алгоритм требует больше времени для вычислений. % TODO циферки
-    \end{original}
+\end{original}
 
     Fundamentally different approach is implemented in the models that use Finite Element Method
     which is widely applied for engineering calculations. In this approach continuous parameters of
@@ -299,7 +306,7 @@
     a~simplified algorithm requires more time for computation. The~paper \cite{mueller-stable}
     presents an example of such model.
 
-    \begin{original}
+\begin{original}
     Отдельно стоят так~называемые геометрические алгоритмы, в~которых напрямую не~моделируются
     физические законы. Как~правило, объект представляется в~виде системы частиц, движение каждой из
     которых сначала интегрируется независимо от~остальных, а~следующим шагом на объект в~целом
@@ -307,7 +314,7 @@
     и~т.п.), обеспечивающие в итоге правдоподобные деформации. Метод сопоставления формы, один из
     таких геометрических методов, описывается в работе~\cite{mueller-meshless}. Он имеет хорошее быстродействие,
     при этом обладая большей устойчивостью и простотой в конфигурации, чем системы масс и пружин.
-    \end{original}
+\end{original}
 
     The separate group of methods are formed by so called geometric algorithms. They do not simulate
     laws of physics directly. Generally, the object is represented as a particle system, where
@@ -319,11 +326,11 @@
 
   \section{Problem statement}\label{sec:task}
 
-    \begin{original}
+\begin{original}
     Целью работы является разработка системы моделирования деформаций объектов для применения в
     приложениях виртуальной реальности: в компьютерных играх и обучающих тренажёрах.
     К~системе предъявляются следующие требования.
-    \end{original}
+\end{original}
 
     The goal of this work is development of the system for modeling deformation of bodies to be
     applied in virtual reality applications: computer games and training simulators.
@@ -331,19 +338,19 @@
 
     \subsection{Requirements}
 
-    \begin{original}
+\begin{original}
     Необходимо использовать сетки из треугольников в качестве внутреннего представления, либо
     предоставить возможность конвертации, поскольку в приложениях виртуальной реальности отображаемые объекты
     чаще всего представляются именно в таком формате. Это связано с~тем, что треугольник является
     одним их основных геометрических примитивов для графических процессоров.~\cite{nvidia-tutorial}
-    \end{original}
+\end{original}
 
     Triangle meshes should be used as internal representation, or the possibility of conversion from
     such format should be available, because it is a common way of representing visible objects in
     virtual reality applications. That is because triangle is one of the basic geometric primitives
     for graphical processors~\cite{nvidia-tutorial}.
 
-    \begin{original}
+\begin{original}
     Система должна иметь достаточное быстродействие, чтобы обеспечивать моделирование в~реальном
     времени. Известно, что для комфорта пользователя и ощущения им реалистичности моделируемого мира
     приложение виртуальной реальности должно обеспечивать кадровую частоту около 30 кадров в секунду %TODO: кадровую-кадров
@@ -357,7 +364,7 @@
     рассчитанные деформации. % TODO (В дальнейшую работу?) При~этом важно предусмотреть некоторое сглаживание смещений точек
     % отображаемого объекта, иначе в~их~движении можно будет проследить форму низко детализированного
     % представления.
-    \end{original}
+\end{original}
 
     The system should be fast enough to provide real-time simulation. A frame rate of 30 frames per
     second or higher is required for user's comfort and feeling of realism of the simulated
@@ -369,27 +376,27 @@
     representation of the object for simulation. Displayed mesh of higher resolution in this case
     should only be updated to make it repeat already calculated deformation.
 
-    \begin{original}
+\begin{original}
     Для эффективного использования вычислительной мощности многоядерных центральных процессоров,
     получающих в наши дни всё большее распространение~\cite{steam-hardware}, нужно, чтобы вычисления могли
     выполняться параллельно.
-    \end{original}
+\end{original}
 
     Multi-core central processors become more and more widespread nowadays~\cite{steam-hardware}. In
     order to effectively exploit computational power of such processors the computations should be
     able to run in parallel.
 
-    \begin{original}
+\begin{original}
     Кроме~того, предварительно рассчитанные деформированные состояния не~должны использоваться,
     поскольку, как было объяснено в разделе~\ref{sec:domain}, такой подход негативно сказывается на реалистичности
     моделирования и создаёт неудобства при разработке приложения.
-    \end{original}
+\end{original}
 
     In addition, precomputed deformable states should no be used, because this approach adversely
     affects the realism of simulation and creates inconveniences during the development process, as
     it was explained in section~\ref{sec:domain}.
 
-    \begin{original}
+\begin{original}
     Наконец, интерфейс, предоставляемый системой, не~должен создавать трудностей при её интеграции
     в~приложения виртуальной реальности. Основные критерии, которым необходимо следовать,
     описаны в~\cite{gems-middleware} и~включают, в~частности, конфигурируемые обработку ошибок,
@@ -397,7 +404,7 @@
     работы с~буферами в~оперативной памяти. Кроме того, нельзя допускать зависимости от конкретных
     реализаций примитивов синхронизации и функций для работы с потоками, поскольку это может создать
     неудобства, если в приложении используются другие реализации.
-    \end{original}
+\end{original}
 
     Finally, the interface of the system should not create difficulties during its integration into
     virtual reality applications. The application which the system is integrated into is further called
@@ -410,7 +417,7 @@
 
     \subsection{Objectives}
 
-    \begin{original}
+\begin{original}
     Для достижения цели необходимо решить следующие задачи:
     \begin{enumerate}
       \item Разработать и~реализовать алгоритм моделирования в реальном времени деформаций
@@ -425,7 +432,7 @@
         \end{enumerate}
       \item Предусмотреть возможность использования параллельных вычислений.
     \end{enumerate}
-    \end{original}
+\end{original}
 
     In order to achieve the goal of this work the following objectives should be completed:
     \begin{enumerate}
@@ -444,11 +451,11 @@
 
   \section{Modeling deformation}
 
-    \begin{original}
+\begin{original}
     В этом разделе рассматриваются методы, используемые для решения поставленных задач. Описан выбор
     основного алгоритма для моделирования деформаций неупругих тел, сделанные в~нём изменения,
     а~также реализация дополнительных функций и применение параллельных вычислений.
-    \end{original}
+\end{original}
 
     In this section the methods are considered which are used for solving the stated problem. Described are
     the main algorithm chosen for modeling plastic deformations of bodies, the improvements that were
@@ -456,7 +463,7 @@
 
     \subsection{Basic algorithm}\label{ssec:basic_algorithm}
 
-      \begin{original}
+\begin{original}
       В разделе~\ref{sec:domain} были рассмотрены различные подходы к моделированию деформаций:
       система масс и пружин, упрощённый метод конечных элементов и геометрический метод
       сопоставления формы. В~частности, было показано, что использование системы масс и пружин
@@ -469,7 +476,7 @@
       реалистичным, нужно в каждом конкретном случае правильно подобрать параметры. Впрочем, число
       этих параметров меньше, чем в случае метода масс и пружин. Далее описан исходный алгоритм и
       изменения, которые были сделаны для его адаптации к текущей задаче.
-      \end{original}
+\end{original}
 
       In the section~\ref{sec:domain} different approaches to modelling deformations were
       considered. They include a~mass-spring system, a~simplified finite elements method and
@@ -487,14 +494,14 @@
 
       \subsubsection{Original algorithm}\label{sssec:original_algorithm}
 
-        \begin{original}
+\begin{original}
         \paragraph{Входные данные и результат.} Объект представляется в~виде набора точек,
         сгруппированных в~перекрывающиеся множества, называемые кластерами
         (информация о~связях между вершинами, то~есть об~образуемых ими полигонах, не требуется).
         На~вход алгоритма поступает заданный таким образом объект, а так же информация о~приложенных
         силах. Задаётся величина шага по времени. Результатом выполнения одной итерации алгоритма
         являются позиции точек, задающих объект, в следующий момент времени.
-        \end{original}
+\end{original}
 
         \paragraph{Input and output.} An object is represented by an array of points, grouped into
         overlapping sets here called clusters. Therefore, the information about connections between
@@ -503,7 +510,7 @@
         of single iteration of algorithm are positions of points representing object at the next
         instant of time.
 
-        \begin{original}
+\begin{original}
         \paragraph{Общая схема алгоритма.} Скорости и позиции этих материальных точек интегрируются независимо
         друг от друга, для чего используется явная схема Эйлера. Затем над каждым кластером
         производится операция сопоставления формы: вычисляется новое положение центра масс кластера
@@ -522,7 +529,7 @@
           \matx A = \left( \sum_i m_i \vect{p}_i \vect{q}_i^\transposed \right)
                     \left( \sum_i m_i \vect{q}_i \vect{q}_i^\transposed \right)^{-1}.
         \end{equation}
-        \end{original}
+\end{original}
 
         \paragraph{General scheme of the algorithm.} Velocities and positions of these mass-points
         are integrated regardless of each other using explicit Euler method. Then each cluster is
@@ -542,14 +549,14 @@
                     \left( \sum_i m_i \vect{q}_i \vect{q}_i^\transposed \right)^{-1}.
         \end{equation}
 
-        \begin{original}
+\begin{original}
         После того как оптимальное преобразование $\matx A$ найдено, для каждой точки определяется
         положение, которое она имела бы, если бы изменение формы кластера в~точности определялось этим
         преобразованием, с~учётом смещения центра масс:
         \begin{equation}
           \vect{g}_i = \matx{A} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.}.
         \end{equation}
-        \end{original}
+\end{original}
 
         Once the optimal transformation $\matx A$ of the cluster is found, the goal position is
         calculated for each point which belongs to it. The \emph{goal position} of a point is a
@@ -559,14 +566,14 @@
           \vect{g}_i = \matx{A} (\vect{x}^0_i - \vect{x}^0_{c.m.}) + \vect{x}_{c.m.}.
         \end{equation}
 
-        \begin{original}
+\begin{original}
         Далее $\vect{g}_i$ называется целевой позицией точки. Для каждой точки, исходя из величины
         отклонения её текущей позиции от~целевой, рассчитывается поправка к~скорости, корректирующая
         это отклонение. Если точка входит одновременно в~несколько кластеров, то~есть находится
         в~зоне их перекрытия, корректирующие поправки от~каждого из~кластеров усредняются, что
         обеспечивает целостность объекта: за~счёт этого кластеры, обрабатываемые независимо,
         не~отделяются друг от~друга.
-        \end{original}
+\end{original}
 
         For each point of the cluster an amendment to its velocity is calculated which corrects the
         deviation of the current position from the goal position. If the point is included in more
@@ -574,7 +581,7 @@
         clusters are averaged. This ensures integrity of the object: due to that fact the clusters
         do not separate from each other although they are handled independently.
 
-        \begin{original}
+\begin{original}
         \paragraph{Остаточная деформация.} Для моделирования неупругости остаточная деформация
         каждого кластера сохраняется в~форме линейного преобразования $\matx{S}^{ост}$, то~есть
         матрицы $3 \times 3$. Изначально она единичная, а~изменение происходит, лишь когда мера
@@ -603,7 +610,7 @@
         \begin{equation}
           \vect{g}_i = \matx{A} \matx{S}^{ост} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.}.
         \end{equation}
-        \end{original}
+\end{original}
 
         \paragraph{Residual deformation.} To simulate inelasticity the residual deformation of each
         cluster is saved in the form of a linear transformation $\matx{S,}^{\!\!res}$ that is, in the
@@ -628,7 +635,7 @@
         $\|\matx{S}^{res} - \matx E\|_2$ reaches extreme value of $d_{max}$ the matrix
         $\matx{S}^{res}$ ceases to change. Residual deformation is then taken into account during
         shape matching and computing goal positions. To be exact, initial positions are transformed
-        by the matrix $\matx{S}^{res}$ before they are compared to current positions. Thus,
+        by the matrix $\matx{S}^{res}$ before they are compared to current positions. Thus
         matching is made to deformed shape instead of the initial one. Besides, the formula for goal
         positions becomes as follows:
         \begin{equation}\label{eq:goal_pos}
@@ -637,7 +644,7 @@
 
       \subsubsection{Proposed changes of algorithm}\label{sssec:proposed_changes}
 
-        \begin{original}
+\begin{original}
         В~исходный алгоритм вносятся изменения, адаптирующие его к~условиям данной
         задачи. Во-первых, моделирование неупругих тел требует демпфирования возникающих колебаний.
         Во-вторых, система отвечает только за~моделирование деформаций, а глобальное движение и
@@ -645,7 +652,7 @@
         Поэтому расчёт деформаций необходимо производить в~локальных координатах~---
         в~неинерциальной системе отсчёта, связанной с центром масс объекта, в которой он не
         движется и не вращается. Далее для краткости она называется системой центра масс.
-        \end{original}
+\end{original}
 
         The changes are made to the basic algorithm in order to adapt it to the current conditions.
         First, simulation of inelastic bodies requires damping of arising oscillations. Second, the
@@ -655,7 +662,7 @@
         associated with the center of mass of the object where it neither move or rotate. Further
         this reference frame is called the \emph{center-of-momentum frame.}
 
-        \begin{original}
+\begin{original}
         \paragraph{Демпфирование.} Чтобы поведение неупругого тела выглядело правдоподобно,
         нужно, чтобы затухали только колебания, а глобальное движение тела сохраняло свои характеристики.
         Для этого используется способ, описанный в~\cite[подраздел~3.5]{mueller-position-dynamics}. Сначала выделяется
@@ -684,7 +691,7 @@
           \vect{v}_i = \vect{v}_i - k \Delta \vect{v}_i,
         \end{equation}
         где $k \in [0, 1]$. За счёт этого $\vect{v}_{ц.м.}$ и $\vect{\omega}$ сохраняются.
-        \end{original}
+\end{original}
 
         \paragraph{Damping.}
         In order that the behavior of inelastic body looks plausible it is necessary that only
@@ -715,7 +722,7 @@
         \end{equation}
         where $k \in [0, 1]$. Therefore, $\vect{v}_{c.m.}$ and $\vect{\omega}$ are conserved as necessary.
 
-        \begin{original}
+\begin{original}
         \paragraph{Расчёт в локальных координатах.} Проблема, возникающая при расчёте деформаций в
         системе центра масс, заключается в том, что вследствие удара или воздействия внешних сил
         у~тела может появиться как ненулевая скорость центра масс, так и ненулевая угловая скорость.
@@ -727,12 +734,12 @@
         После этого приложение, в которое встроена система, должно получить из неё значения
         $\vect{v}_{ц.м.}$ и $\vect{\omega}$ и скорректировать глобальное движение объекта, прибавив их
         к его линейной и угловой скоростям соответственно.
-        \end{original}
+\end{original}
 
         \paragraph{Computing in local coordinates.} The problem which appears when deformations are
         computed in the center-of-momentum frame is as following. As a result of a stroke or
         external forces effect, a non-zero velocity of the center of mass of body may appear, as well as
-        non-zero angular velocity. Thus, the named reference frame will no longer be the
+        non-zero angular velocity. Thus the named reference frame will no longer be the
         center-of-momentum frame. That is why the correction is made after integrating velocities
         and before integrating positions of vertices. $\vect{v}_{c.m.}$ and $\vect{\omega}$ acquired
         during the present step are already calculated during the computation of damping. In order to
@@ -744,13 +751,13 @@
 
     \subsection{Implementation of additional features}
 
-      \begin{original}
+\begin{original}
       Как уже говорилось в разделе~\ref{sec:task}, кроме собственно моделирования деформаций, ядро
       системы предоставляет дополнительную функциональность, а именно, поддержку недеформируемых
       частей, получение информации о произошедших столкновениях и приложенных силах, обнаружение
       определённых событий и обновление отображаемой сетки. Предлагаемые способы
       реализации этих функций описаны далее.
-      \end{original}
+\end{original}
 
       As it was already mentioned in section~\ref{sec:task}, the core of the system provides
       an additional functionality besides modelling deformation. This includes support for
@@ -760,7 +767,7 @@
 
       \subsubsection{Support for undeformable parts}
 
-        \begin{original}
+\begin{original}
         Имеется возможность задать множество вершин, сохраняющее свою форму~--- недеформируемую раму.
         Чтобы обеспечить это, используется та~же техника, что и в~алгоритме демпфирования,
         описанном в п.~\ref{sssec:proposed_changes}, только коэффициент $k$ в~\eqref{eq:damping}
@@ -768,7 +775,7 @@
         подавляются полностью. Это действие необходимо также производить на каждом шаге, после
         интегрирования скоростей, но до~демпфирования, иначе из-за порождённых колебаний система
         может стать нестабильной.
-        \end{original}
+\end{original}
 
         It is required to provide the ability to define a set of vertices which saves its shape:
         a~\emph{rigid frame}. The same technique is used here as in the damping algorithm described
@@ -780,7 +787,7 @@
 
       \subsubsection{Obtaining information about external actions}\label{sssec:external_forces}
 
-        \begin{original}
+\begin{original}
         Деформация объекта происходит по причине внешних воздействий на него, наиболее интересными
         из которых являются столкновения~--- они и приводят к наибольшим деформациям. Количественно
         столкновение может быть задано как~в виде силы, действующей в~течение определённого времени, так и
@@ -789,7 +796,7 @@
         того, какой способ задания столкновений в~нём используется.
         Любое внешнее воздействие оказывается локально, поэтому необходимо также указать область,
         в~которой оно действует.
-        \end{original}
+\end{original}
 
         Deformation of the object is caused by external actions, collisions being the most
         interesting of them, since they cause the most strong deformation. Quantitatively the
@@ -800,7 +807,7 @@
 
       \subsubsection{Detecting events}\label{sssec:events}
 
-        \begin{original}
+\begin{original}
         Следствием деформации объекта в~приложениях виртуальной реальности является не только
         изменение формы его отображаемой модели. Типичные события и их последствия могут быть
         наглядно продемонстрированы на примере автомобильного симулятора. Хрупкие объекты, такие как
@@ -817,23 +824,53 @@
         \end{enumerate}
         Способ обнаружения каждого из событий описан далее. Интерфейс для уведомления об
         обнаруженном событии рассматривается в п.~\ref{sssec:reactions}.
-        \end{original}
+\end{original}
 
-        \begin{original}
+        Change of shape of the object is not the only result of deformation of an object in a
+        virtual reality application. Typical events and their consequences may be illustrated by the
+        example of automobile simulator. Fragile objects such as windows and mirrors should be
+        destroyed in case of a direct stroke or a significant change of their shape. An engine
+        should stop working after a serious deformation of the body around it. Finally, an
+        automobile should slow down if the body is so much deformed that it touches the road.
+        Thus the system for modelling deformations should detect happening events and notify the
+        host application about them. This system can detect the following events:
+        \begin{enumerate}
+          \item A stroke into a particular area which is stronger than a predefined threshold.
+          \item A strong local deformation: a deviation of position of some point of the object from
+                the initial shape which is more than a predefined threshold.
+          \item Entering predefined area by some point of the object (or leaving).
+        \end{enumerate}
+        The ways of detection of each type events are explained below.
+
+\begin{original}
         \paragraph{Удар в заданную область.}
         Простейшее событие~--- это удар в некоторую область, заданную массивом индексов
         входящих в~неё вершин. Для его определения нужно лишь проверить, входит ли хоть одна из этих
         вершин в~зону действия удара и превышает~ли изменение её скорости пороговую величину.
-        \end{original}
+\end{original}
 
-        \begin{original}
+        \paragraph{A stroke into a given area.}
+        The simplest kind of event is a stroke into some area. To detect this event it is only
+        required to check whether at least one of these vertices belongs to this area and whether
+        the change of absolute value of its velocity exceeds the threshold value.
+
+\begin{original}
         \paragraph{Отклонение от начальной формы.}
         Для определения таких событий необходимо отдельно хранить начальную позицию каждой вершины.
         То, что вычисления производятся в~системе центра масс, упрощает определение
         отклонения. За~счёт того, что постоянные смещения и повороты, не~являющиеся деформациями,
         автоматически исключаются, отклонение может быть вычислено просто как разность текущей и
         начальной позиции.
+\end{original}
 
+        \paragraph{Deviation from initial shape.}
+        In order to detect such events it is necessary to store initial position of every vertex.
+        Making computations in the center-of-momentum frame simplifies detection of the deviation.
+        Due to the fact that such false deformations as shifts and rotations are automatically
+        eliminated, the deviation can be found simply as the difference between the current and the
+        initial positions.
+
+\begin{original}
         Однако при наличии жёсткой рамы эта разность уже не характеризует деформацию. Рама может
         двигаться относительно центра масс, и её вершины при этом будут иметь ненулевое отклонение
         от начальных позиций. Но на~самом деле форма рамы не~изменилась, так что считать, что событие
@@ -845,17 +882,39 @@
         необходимо обратить матрицу поворота (для чего её достаточно транспонировать, так~как она
         ортогональна). Чтобы не делать этого на каждом шаге алгоритма, можно просто интегрировать угловую
         скорость с~противоположным знаком.
+\end{original}
 
+        However, in case of presence of a rigid frame this difference doesn't describe the
+        deformation well. The rigid frame may move relative to the center of mass, and in this case
+        its vertices may have non-zero deviation from initial positions. In fact, the shape of the
+        frame is not changed anyway, so it is not correct to assume that an event of deviation from
+        initial shape happened. In order to eliminate such false detections it is necessary to
+        determine the shift and the rotation of the rigid frame relative to the center-of-momentum
+        frame.  If these shift and rotation are subtracted from the position of a vertex before
+        comparing it to its initial position, then the positions of vertices forming the rigid frame
+        will be always equal to their initial positions. The shift and the rotation are found by
+        integrating linear and angular velocities of the rigid frame at each step. But in order to
+        ''subtract'' the rotation we need to invert the rotation matrix (i.e. transpose it, since it
+        is orthogonal). To avoid doing it at each step the vector of angular velocity can simply be
+        inverted during its integration.
+
+\begin{original}
         \paragraph{Вход в~заданную область.}
         Координаты, в которых задана область, логично связать с~неподвижной рамой. Для этого, как и
         в~случае с определением отклонения от начальной формы, описанным выше, перед проверкой на принадлежность
         области необходимо подвергнуть позицию вершины смещению и повороту, обратным к смещению и
         повороту рамы.
-        \end{original}
+\end{original}
+
+        \paragraph{Entering a predefined area.}
+        It is logical to define the area in the coordinate system associated with the undeformable
+        frame. To do this the same method is used as to detect a deviation from initial shape which
+        is described above. Before testing vertex position for belonging to the area it should be
+        subjected to the shift and the rotation inverse to those of the rigid frame.
 
       \subsubsection{Support for high-polygonal meshes}\label{sssec:hi-poly}
 
-        \begin{original}
+\begin{original}
         \paragraph{Преобразование позиций.}
         Отображение деформаций низкополигональной физической модели объекта на высокополигональную
         отображаемую сетку реализуется с~использованием того, что остаточная деформация кластера и
@@ -866,13 +925,31 @@
         $\matx A$ можно использовать её ортогональную компоненту $\matx R$, характеризующую
         оптимальное вращение, чтобы сильные изменения формы физической модели не отражались на
         отображаемой сетке:
-        \begin{equation}\label{eq:graphical_pos}
+        \begin{equation}\
           \vect{x}'_i = \matx{R} \matx{S}^{ост} (\vect{x}^0_i - \vect{x}^0_{ц.м.}) + \vect{x}_{ц.м.}.
         \end{equation}
         В случае если вершина входит в несколько кластеров, позиции, рассчитанные по этой формуле
         для каждого из них, должны быть усреднены. Полученная в результате позиция и будет позицией
         вершины в деформированной отображаемой сетке.
+\end{original}
 
+        \paragraph{Transforming positions.}
+        Mapping deformation of the low-polygonal physical model of an object onto the high-polygonal
+        displayed mesh is done using the fact that residual deformation of every cluster and its
+        current state is stored in the form of a matrix. Thus each vertex of high-polygonal mesh
+        should be also associated with one or more clusters and its initial position should be
+        stored. In each cluster its new position is calculated the same way as the goal position
+        in~\eqref{eq:goal_pos}. Here the orthogonal component $\matx R$ of the matrix $\matx A$ can
+        be used instead the matrix $\matx A$ itself in order to prevent serious changes of the shape
+        of physical model from transferring onto the displayed mesh:
+        \begin{equation}\label{eq:graphical_pos}
+          \vect{x}'_i = \matx{R} \matx{S}^{res} (\vect{x}^0_i - \vect{x}^0_{c.m.}) + \vect{x}_{c.m.}.
+        \end{equation}
+        If the vertex is included into more than one cluster, then the positions obtained from this
+        formula for each of them should be averaged. Resulting position is the desired new position
+        of the vertex of the deformed visible mesh.
+
+\begin{original}
         \paragraph{Преобразование векторов.}
         Кроме позиции вершина высокополигональной сетки обычно также содержит некоторые связанные векторы:
         например, нормаль к поверхности в данной точке, требующуюся при расчёте освещения, или
@@ -882,7 +959,20 @@
         принадлежащих касательной плоскости точек, причём если взять их достаточно близкими друг
         к~другу, то можно считать, что они обе лежат на поверхности, и, следовательно, их разность
         преобразуется так же, как и точки поверхности.
+\end{original}
 
+        \paragraph{Transforming vectors.}
+        Besides its position a vertex of high-polygonal mesh usually has some vectors associated
+        with it. Examples are the normal to the surface required for lighting computation and
+        tangential basis for bump-mapping~\cite{blinn-bump}. They also have to be transformed after
+        deformations. The vectors parallel to the surface and those normal to it are transformed in
+        different ways. A parallel vector can be represented as a difference of two points belonging
+        to the tangential plane. If these points are close to each other they both may be assumed to
+        belong the surface. Therefore, their difference is transformed the same way as the surface
+        itself. In other words, the same matrix should be used for transforming parallel vectors as
+        for transforming positions.
+
+\begin{original}
         Нормаль же преобразуется иначе. Пусть $\vect n$~---
         нормаль, тогда касательная плоскость в~точке $\vect{x}_0$ описывается уравнением
         \[
@@ -905,42 +995,53 @@
         Таким образом, итоговые формулы для обновления параллельных и перпендикулярных поверхности
         векторов, соответственно:
         \begin{eqnarray}
+          \vect{t}_i\!' & = & \matx{R} \matx{S}^{ост} \vect{t}^{\;0}_i, \\
+          \vect{n}'_i & = & \left(\left(\matx{R} \matx{S}^{ост}\right)^{-1}\right)^\transposed \vect{n}^0_i.
+        \end{eqnarray}
+\end{original}
+
+        Transformation of normals is different. Let $\vect n$ be a normal, than the tangential plane
+        for the point $\vect{x}_0$ is defined by the following equation
+        \[
+        \vect{n}^\transposed (\vect x - \vect{x}_0) = 0.
+        \]
+        Let $\matx M$ be the matrix that is used for transforming positions of points. Then taking
+        into account that $\matx{M}^{-1} \matx{M} = \matx{E}$ the plane equation is transformed as
+        follows:
+        \[
+          \vect{n}^\transposed \matx{M}^{-1} \matx{M} (\vect x - \vect{x}_0) = 0,
+        \]
+        which is equivalent to
+        \[
+           \left( (\matx{M}^{-1})^\transposed \vect{n} \right)^\transposed (\matx{M} \vect x - \matx{M} \vect{x}_0) = 0.
+        \]
+        This implies that $(\matx{M}^{-1})^\transposed \vect{n}$ is normal to the tangential plane
+        transformed with the matrix $\matx M$. So then, the vectors normal to the surface are
+        transformed with the transposed inverse of the matrix used to transform positions.
+
+        Finally, the formulas for updating parallel and normal to the surface vectors are, respectively:
+        \begin{eqnarray}
           \vect{t}_i\!' & = & \matx{R} \matx{S}^{ост} \vect{t}^{\;0}_i, \label{eq:tangent_vectors} \\
           \vect{n}'_i & = & \left(\left(\matx{R} \matx{S}^{ост}\right)^{-1}\right)^\transposed \vect{n}^0_i. \label{eq:normal_vectors}
         \end{eqnarray}
 
+\begin{original}
         \paragraph{Необходимость коррекции векторов.}
         Такие векторы, как нормаль или векторы тангенциального базиса, как правило, должны быть
         нормализованы. Однако описанные выше преобразования векторов не гарантируют сохранения
         нормы. Поэтому, если в~этом есть необходимость, после действия описанного выше преобразования
         они должны быть снова нормализованы в~использующем систему приложении.
+\end{original}
 
-        \paragraph{Поддержка произвольной структуры данных.}
-        Для обновления отображаемой сетки система обращается к данным, тип которых
-        определяется её пользователем. Во избежание сложностей при интеграции ограничений на этот
-        тип данных быть не должно, поэтому для задания его структуры
-        используется специальный объект <<описатель вершины>>. Пользователь системы создаёт этот
-        объект, указывая в~нём размер в~байтах структуры, задающей вершину, и расположение в~ней
-        (в~виде смещения от начала структуры в~байтах) полей, хранящих связанные с~вершиной точки и
-        векторы, в~том числе, её позицию.  Предполагается, что каждая точка или вектор хранятся
-        в~этой структуре как три последовательных числа с~плавающей точкой одинарной точности (тип
-        float в~C++)~--- одинарная точность чаще используется при работе с графическим процессором,
-        поскольку современные видеоадаптеры пока имеют значительно худшую производительность
-        при использовании чисел двойной точности (double) \cite{gpu-float}. Этих точек и
-        векторов может быть несколько, поэтому в~описателе вершины хранится массив их смещений,
-        кроме того, в отдельном массиве для каждого вектора хранится булевский флаг, задающий,
-        является~ли этот вектор параллельным или перпендикулярным поверхности. Указатель на~массив
-        вершин отображаемой сетки передаётся как указатель на неопределённый тип (void*)
-        в~конструктор класса, представляющего деформируемый объект, где требуется информация о
-        начальных позициях вершин для сохранения и привязки вершин к кластерам, и в~функцию
-        обновления отображаемой сетки. В~обоих случаях вместе с~указателем на массив вершин
-        передаётся описатель вершины, который используется для индексирования этого массива и
-        доступа к~хранящимся в~вершине данным.
-        \end{original}
+        \paragraph{Need for correction of vectors.}
+        Such vectors as normals or tangential basis vectors, as a rule, have to be normalized.
+        However, the transformations described above do not guarantee the conservation of their
+        norm. That is why after these transformations they should be normalized again in the host
+        application, if it is necessary.
 
     \subsection{Parallel computing}\label{ssec:parallel}
 
-      \begin{original}
+\begin{original}
       В разделе~\ref{sec:task} было сказано, что одной из задач, поставленных в данной работе, является эффективное использование
       мощности многоядерных процессоров за счёт применения параллельных вычислений.
       Это актуально, поскольку многоядерные процессоры
@@ -954,11 +1055,19 @@
       % параллельных вычислений нужно применить метод А. Но ведь есть ещё целая куча других моделей
       % параллельных вычислений (не только задачи). Сети петри, там, можешь ещё про Axum почитать ;)
       % Тут надо либо аккуратно окучить тему, либо чётко описать, почему именно используются задачи.
-      \end{original}
+\end{original}
+
+      In the section~\ref{sec:task} it was mentioned that one of the objectives of this work is
+      effective exploitation of multi-core processors' power by means of parallel computing.
+      It is relevant since multi-core processors become prevalent nowadays~\cite{steam-hardware}.
+      In~order to make parallel computation possible it is necessary to split the algorithm into the
+      independent blocks called \emph{tasks} and to implement a task manager responsible for their
+      parallel execution. Furthermore, some part of computations for updating visible mesh can be
+      delegated to a graphical processor.
 
       \subsubsection{Splitting algorithm into tasks}\label{sssec:parallel_tasks}
 
-        \begin{original}
+\begin{original}
         Основной алгоритм содержит этап, состоящих из независимых однотипных блоков
         действий~--- это выполнение сопоставления формы для каждого кластера. Входными данными для
         сопоставления формы являются текущие позиции вершин, и они не изменяются в процессе
@@ -971,11 +1080,24 @@
         обработки всего объекта>>. Поскольку матрицы, входящие
         в~формулу \eqref{eq:graphical_pos}, к началу работы над задачей обработки всего объекта уже вычислены,
         расчёт деформации отображаемой сетки может производиться параллельно выполнению этой задачи.
-        \end{original}
+\end{original}
+
+        The basic algorithm includes a stage containing of independent and uniform blocks of
+        actions. It is a stage of shape matching for every cluster. Current positions of the
+        vertices, being the input data of this stage, are not changed during its execution. So that
+        the order of applying this operation to each cluster is not important. That is why its
+        application to a single cluster can be separated as an independent task. The remaining part
+        of the algorithm includes actions performed over the whole set of vertices at once, each of
+        which uses the result of the previous one. They cannot be executed in parallel, so they all
+        are combined into a single task which is executed after all tasks of the first stage are
+        completed. This big task is called ''the whole-body processing task'' further. It is
+        important here that the matrices included in the formula \eqref{eq:graphical_pos} are
+        already computed by the start of this whole-body processing task. It means that updating the
+        displayed mesh can be done simultaneously with the execution of this task.
 
       \subsubsection{Task manager}\label{sssec:task_manager}
 
-        \begin{original}
+\begin{original}
         За параллельное выполнение задач и соблюдение порядка, в котором они должны начинать
         исполнение, отвечает менеджер задач. При разработке компонента
         для приложения виртуальной реальности нужно учитывать, что в~этом приложении
@@ -988,11 +1110,21 @@
         функционирующий корректно при одновременном доступе из нескольких потоков. Далее такой
         интерфейс называется <<потокобезопасной очередью задач>>. Под очередью здесь понимается именно строгий порядок выдачи
         задач на исполнение, завершение предыдущей задачи для начала выполнения следующей не требуется.
-        \end{original}
+\end{original}
+
+        A task manager is a unit responsible for parallel execution of tasks and controlling their
+        order. It should be taken into account during its development that the host application may
+        already have its own task manager. In this case the most effective approach is to use its
+        abilities of distribution tasks between execution threads instead of doing it singly.
+        Further, portability of the system is improved by eliminating the dependence on particular
+        library for thread management. Thus the system should only provide a thread-safe interface
+        for obtaining and executing the tasks in the appropriate order. Such interface is called
+        a~''thread-safe task queue''. By queue here meant is merely the strict order of distributing
+        tasks for execution, but finishing a task before starting the next one is not required
 
       \subsubsection{Using graphical processor}\label{sssec:using_gpu}
 
-        \begin{original}
+\begin{original}
         Графический процессор входит во все современные видеоадаптеры и предназначен, в
         первую очередь, для ускорения процесса получения изображения трёхмерной сцены. Современные
         графические процессоры обладают высокой вычислительной мощностью и позволяют выполнять
@@ -1005,7 +1137,22 @@
         использование видеоадаптера всё-таки невозможно или является причиной проблем
         с~производительностью, расчёты могут быть выполнены целиком на центральном процессоре, для
         чего система предоставляет отдельный интерфейс.
+\end{original}
 
+        A graphical processor is included into all contemporary video adapters and is intended
+        primarily for accelerating the process of generating the image of 3D scene. Moder graphical
+        processors have high computational power and allow performing computations which are not
+        related directly to producing images. When a graphical processor is used for such
+        computations the computational load is distributed between it and the central processor,
+        thus giving an acceleration due to their parallel operation. Applying a graphical processor
+        for computations in this system should not create additional hardware requirements for the
+        host application, since today most of computer games and virtual reality applications
+        already require its presence for the sake of computing 3D graphics. In case if using video
+        adapter is nevertheless impossible or causes performance problems the computation still can
+        be performed entirely on the central processor. The system provides a separate interface for
+        this case.
+
+\begin{original}
         \paragraph{Возможности графического процессора.}
         Процесс создания изображения графическим процессором представляет собой конвейер,
         осуществляющий параллельную обработку данных на каждом этапе: отдельных вершин,
@@ -1014,7 +1161,17 @@
         применяемая к~каждому обрабатываемому объекту в~отдельности: вершине, примитиву или пикселю.
         Кроме данных текущего объекта шейдер имеет доступ к~данным, одинаковым для всех объектов
         данного этапа~--- константам шейдера.
+\end{original}
 
+        \paragraph{Possibilities of graphical processors.}
+        The process of creating an image by a graphical processor is a pipeline performing parallel
+        processing of data at each stage. Processed are separate vertices, geometrical primitives
+        and, finally, pixels of displayed 2D image. A special program called \emph{shader} is
+        responsible for processing at each stage. It is applied independently to each object: a
+        vertex, a primitive or a pixel. Besides the current object a shader has access to some data
+        identical for all objects of this stage called \emph{shader constants}.
+
+\begin{original}
         \paragraph{Выбор подходящей задачи.}
         В~связи с~перечисленными выше особенностями шейдеров, не всякая задача может быть выполнена
         на графическом процессоре. В~данной работе наиболее подходящей для этого является задача
@@ -1026,7 +1183,20 @@
         арифметические операции над векторами и умножение матрицы на вектор, которое может быть
         представлено как последовательные скалярные произведения. Все эти операции присутствуют
         в~наборе инструкций графического процессора.
+\end{original}
 
+        \paragraph{Choosing an appropriate task.}
+        As a result of the features of shaders listed above not all of the tasks can be executed on
+        a graphical processor. In this work the most suitable for is is the task of computing new
+        positions of visible mesh vertices after deformations. First, one of the stages of the graphical
+        processor pipeline is exactly for processing the vertices. Second, according to the
+        formula~\eqref{eq:graphical_pos} only the initial position of vertex and the constant parameters of
+        clusters are required for computing a new position of the vertex, that is only the data
+        available in the vertex shader. Finally, only vector arithmetics and multiplying a matrix
+        by a vector are used in computation. All these operation are present in the instruction set
+        of graphical processors.
+
+\begin{original}
         \paragraph{Реализация вычислений в вершинном шейдере.}
         Таким образом, вычисление $\vect{x}'_i$ по формуле~\eqref{eq:graphical_pos} и последующее
         усреднение (в случае нес\-коль\-ких кластеров) может быть выполнено в~вершинном шейдере, если
@@ -1048,7 +1218,25 @@
         хранить лишь расположение следующих величин: позиции (требуется для определения
         принадлежности кластерам), числа кластеров и их индексов (будут записаны единожды в
         конструкторе объекта).
+\end{original}
 
+        \paragraph{Implementation of computations in a vertex shader.}
+        Thus the computation of $\vect{x}'_i$ according to the equation~\eqref{eq:graphical_pos} and
+        subsequent averaging (in case of multiple clusters) can be performed in a vertex shader if
+        required parameters of all clusters (the initial and the current center of mass and the
+        matrix $\matx D = \matx{R} \matx{S}^{res}$) are passed to it as shader constants. Since
+        every vertex may be included into several clusters their indices should be associated with
+        the vertex. An analogous task appears during implementation of skinning animation with matrices
+        \cite{gpu-gems-skinning}, so a similar approach is used here. The number of clusters including
+        a vertex may vary between different vertices. Since the structure describing a vertex cannot
+        have a variable size, a set of indices is represented as an array of fixed size and the
+        number of elements in the array. The size of array is equal to maximum possible number of
+        clusters for a single vertex which depends on the method of decomposing the object into
+        clusters. This values are written only once during the initialization of the object. The
+        need for writing into the buffer of visible vertices in the main loop is also eliminated.
+        Instead, only the new parameters of clusters should be stored into appropriate shader constants.
+
+\begin{original}
         \paragraph{Используемые ресурсы.}
         Константы шейдера хранятся в~специальных регистрах графического процессора. Каждый такой регистр
         представляет вектор из четырёх компонент~--- чисел с плавающей точкой одинарной точности
@@ -1060,286 +1248,22 @@
         поддерживает произвольное число кластеров, количество доступных регистров для констант
         шейдера накладывает на него ограничение, которое должно быть учтено пользователем системы.
         Подробнее эта проблема рассмотрена в п.~\ref{sssec:limitations}.
-        \end{original}
+\end{original}
 
-  \section{System implementation}
-
-    \begin{original}
-    Система реализуется в~виде модуля, который может быть встроен в~приложение виртуальной
-    реальности: статической либо динамической библиотеки, написанной на языке C++. Выбор языка
-    обоснован компромиссом между быстродействием и удобством разработки и интеграции, которые
-    обеспечивает использование объектно-ориентированной парадигмы. Не менее важно, что большинство
-    компьютерных игр и~других приложений виртуальной реальности написаны именно на этом языке
-    программирования, поэтому требование лёгкости интеграции также влияет на выбор в~пользу C++.
-
-    В~системе выделяются следующие модули:
-    \begin{enumerate}
-      \item Ядро системы, обеспечивающее собственно моделирование.
-      \item Подсистема математических расчётов.
-      \item Подсистема журналирования и~обработки ошибок.
-    \end{enumerate}
-
-    В последующих подразделах подробно рассмотрена структура каждого из модулей: входящие в~него
-    классы, их методы и связи друг с~другом.
-
-    \subsection{Ядро системы}
-
-      Основным классом подсистемы является Model, физическая модель деформируемого объекта.
-      Далее описаны различные подробности его реализации и интерфейса. В завершение приводится
-      типичный сценарий его использования в приложении виртуальной реальности.
-
-      \subsubsection{Представление объекта}\label{sssec:representation}
-
-        Физическая конфигурация деформируемого объекта (форма и распределение массы) и отображаемая форма описываются
-        массивами вершин соответствующих классов: PhysicalVertex и GraphicalVertex. Оба вида вершин
-        группируются в~кластеры, за что отвечает класс Cluster. Как уже говорилось в
-        п.~\ref{sssec:hi-poly}, описатель вершины, объект класса VertexInfo, используется для
-        конвертации вершин из формата, используемого в~приложении, во внутренний формат и обратно.
-
-        \includefigure{представление моделируемого объекта в системе}{core-vertices}
-
-        Отдельного внимания требует реализация группировки физических и графических вершин в
-        кластеры. Помимо того, что объект класса Cluster хранит динамические массивы указателей
-        обоих типов, некоторая информация, связанная с принадлежностью к кластеру, должна сохраняться и в самих вершинах. В случае физических
-        вершин поправка к скорости от каждого кластера записывается в отдельную ячейку массива,
-        хранящегося в вершине, во избежание конфликтов при доступе из разных потоков (подробнее это
-        будет объяснено при описании реализации параллельных вычислений далее в этом же подразделе).
-        В случае отображаемых вершин нужно сохранять индексы всех кластеров, в которые входит
-        вершина для переноса деформации на отображаемую сетку на графическом процессоре (см.
-        п.~\ref{sssec:using_gpu}). Итак, с каждой из вершин обоих типов должен быть связан массив,
-        причём одному элементу массива соответствует один кластер, в который входит эта вершина.
-        Использование динамических массивов для этой цели не является оправданным, в связи с большим
-        числом тех и других вершин, а так же с тем, что вершина обычно входит в небольшое число
-        кластеров (будет объяснено ниже). Поэтому
-        максимальное число кластеров, в которое может входить та или иная вершина, ограничивается
-        сверху и используется статический массив.
-
-        \begin{myfigure}{два способа задания кластеров}{fig:clusters}
-          \subfigure[width=0.4\textwidth]{Автоматическое регулярное разбиение}{clusters-automatic}
-          \hspace{0.1\textwidth}
-          \subfigure[width=0.4\textwidth]{Задание произвольных областей}{clusters-arbitrary}
-        \end{myfigure}
-
-        Кластеры могут быть заданы двумя способами. В простейшем случае можно выполнить автоматическое
-        разбиение объекта плоскостями, перпендикулярными каждой из осей и делящими ось на равные
-        отрезки. Для этого в конструктор объекта нужно передать требуемое количество кластеров по
-        каждой из осей и степень их перекрытия (в процентах от ширины). При этом одна вершина может
-        входить не более чем в 8 кластеров одновременно (максимум достигается, если она находится
-        в области перекрытия по всем трём координатным направлениям). Поэтому 8 можно взять в качестве
-        максимально допустимого числа кластеров для одной вершины.
-
-        Автоматическое разбиение на кластеры
-        вполне подходит для однородных объектов простой формы. Если же это не так, можно задать
-        кластеры произвольной формы вручную. При этом в конструктор передаётся набор областей в
-        пространстве, на основе каждой из которых строится кластер, содержащий все вершины, входящие
-        в эту область. Набор областей представляется в виде динамического массива указателей на
-        экземпляры класса IRegion, описанного ниже.
-        % TODO пояснить иллюстрацию словами
-
-      \subsubsection{Внешние воздействия}
-        Как было сказано в п.~\ref{sssec:external_forces}, информация о~воздействиях может быть
-        сообщена объекту двумя способами: в~виде моментального изменения импульса и в~виде сил,
-        действующих в~течение некоторого времени. Первый способ реализует функция Model::hit,
-        которая мгновенно изменяет скорость вершин, входящих в~заданную область. Область
-        в~трёхмерном пространстве представляется абстрактным классом IRegion с~чисто виртуальным
-        методом contains для проверки принадлежности точки этой области. В~библиотеке представлены
-        несколько простейших реализаций (сферическая, цилиндрическая область и~др.), а~необходимые
-        в~конкретном случае более сложные области пользователь системы может реализовать в
-        производном классе.
-
-        Для второго способа используется абстрактный класс Force, описывающий поле сил, действующее
-        в~определённой области пространства. Для применения этого способа нужно при расчёте шага
-        алгоритма передать массив указателей на экземпляры классов-наследников Force, описывающих
-        приложенные к объекту силы. Действие этих сил будет учтено при интегрировании скоростей. Для
-        создания собственной реализации силы необходимо в~классе, производном от Force, определить
-        метод is\_applied\_to, определяющий, приложена ли сила к~вершине, находящейся в данной
-        точке, и метод get\_value\_at, возвращающий вектор силы в этой точке.
-
-        \includefigure{получение информации о внешних воздействиях.}{core-interaction}
-
-      \subsubsection{Характеристики объекта как целого}
-
-        Как уже упоминалось в п.~\ref{sssec:proposed_changes} и п.~\ref{sssec:events}, в~процессе
-        моделирования возникает необходимость в~определении усреднённых линейной и угловой скоростей
-        объекта и рамы и в последующем интегрировании этих скоростей. Первую задачу решает класс
-        DiscreteBody, вторую~--- RigidBody. Класс DiscreteBody также отвечает за демпфирование колебаний
-        объекта и обеспечение движения рамы как твёрдого тела. Он позволяет привести скорости всех
-        входящих в него вершин к вычисленным усреднённым величинам (с~некоторым коэффициентом или в
-        точности). В~свою очередь, RigidBody позволяет интегрировать движение, обратное
-        к движению жёсткой рамы: получаемая при этом матрица поворота используется в процессе
-        обнаружения отклонения вершины от начальной позиции (см. п.~\ref{sssec:events}).
-
-        \includefigure{расчёт и интегрирование характеристик объекта как целого.}{core-bodies}
-
-      \subsubsection{Реакции на события}\label{sssec:reactions}
-
-        События, которые могут быть обнаружены в процессе моделирования деформаций, были описаны в
-        п.~\ref{sssec:events}. Реакция на~каждый тип события реализуется как класс с~чисто
-        виртуальным методом invoke, который пользователь системы определяет в~своём производном
-        классе. Этот метод будет вызван, когда событие произойдёт. Использование такого класса
-        вместо простого указателя на функцию позволяет связать с каждой отдельной реакцией как
-        системную информацию о параметрах события, так и произвольные пользовательские данные,
-        используемые в~теле основного метода. В~первом случае информация хранится в приватных полях
-        базового класса, во~втором~--- в~полях, объявленных пользователем в производном классе.
-
-        \includefigure{определение реакции на события.}{core-reactions}
-
-        Каждому из трёх типов обнаруживаемых событий: удар в~заданное множество вершин, отклонение от
-        начальной формы и вход в~заданную область~--- соответствует свой абстрактный базовый класс: HitReaction,
-        ShapeDeformationReaction или RegionReaction, соответственно.
-        Каждый из этих классов содержит параметры события, которые
-        нужно передать в~его конструктор. Для HitReaction это пороговая абсолютная величина
-        изменения скорости вершины при ударе, а также множество вершин, заданное набором индексов вершин
-        в~массиве, в котором они были переданы в~конструктор объекта. Параметрами для
-        реакции на изменение формы являются множество вершин, заданное аналогичным образом, и минимальное
-        отклонение позиции вершины от начальной позиции, при котором событие считается произошедшим.
-        RegionReaction хранит в себе указатель на IRegion, также при создании можно указать, что
-        является событием: вход в заданную этим указателем область или выход из неё.
-
-        Класс Model хранит массивы указателей на базовый класс реакции каждого типа и содержит
-        методы для добавления в них указателей на экземпляры производных пользовательских классов:
-        add\_hit\_reaction, add\_shape\_deformation\_reaction и add\_region\_reaction (не были
-        показаны на диаграммах для краткости).
-
-      \subsubsection{Параллельные вычисления}
-
-        Как уже говорилось в подразделе~\ref{ssec:parallel}, алгоритм разбивается на задачи, параллельное
-        выполнение которых обеспечивается менеджером задач. В~данном случае менеджер задач представляет собой
-        потокобезопасную очередь, описанную в п.~\ref{sssec:task_manager}. Различные задачи
-        наследуются от базового класса AbstractTask, содержащего чисто виртуальный метод выполнения
-        задачи.  Поскольку задача обработки всего объекта должна выполняться после завершения всех
-        задач первого этапа, она добавляется в~очередь последней. Кроме того, в её начале
-        выполняется ожидание всех событий, устанавливаемых при завершении каждой из задач первого
-        этапа, чтобы гарантировать то, что эти задачи уже выполнены, поскольку очередь задач этого не гарантирует.
-
-        Использование каких-либо определённых примитивов синхронизации может ухудшить переносимость
-        системы. Необходимо предоставить возможность для замены используемого набора примитивов.
-        Это достигается за счёт использования шаблона проектирования <<Абстрактная фабрика>> (англ. \eng{Abstract
-        Factory}). Различные примитивы представлены в виде абстрактных классов, а отдельный
-        абстрактный класс (<<фабрика>>) содержит методы для создания экземпляров каждого из этих
-        классов. Для замены набора примитивов достаточно передать в~систему новую реализацию
-        <<фабрики>>.
-
-        \includefigure{абстрактная фабрика примитивов синхронизации.}{parallel}
-
-        Впрочем, необходимо с~осторожностью использовать блокирующие примитивы синхронизации для
-        ограничения доступа к разделяемым данным, поскольку их неправильное применение может
-        привести к~тому, что задачи, ожидающие доступ к~этим данным, будут выполняться
-        последовательно, а не параллельно.  Например, в~данной задаче поправки к скорости вершины от
-        разных кластеров усредняются. Если суммировать поправки по мере их вычисления, во время
-        выполнения операции суммирования только один поток должен иметь доступ к области памяти,
-        в~которой хранится сумма. Остальные потоки, которые также готовы выполнить суммирование,
-        будут в~это время простаивать. Чтобы избежать этого, каждый кластер записывает свою поправку
-        в~отдельную область памяти, и суммируются они уже после завершения расчётов для кластеров:
-        это действие входит в задачу обработки всего объекта, выполняемую последней.
-
-      \subsubsection{Использование}\label{sssec:usage}
-
-        Таким образом, типичный сценарий работы с~классом Model следующий. Инициализация:
-        \begin{enumerate}
-          \item Создание экземпляра: в конструктор передаются исходные массивы физических и
-          отображаемых вершин, их описатели (VertexInfo), а также параметры разбиения на кластеры.
-          \item Задание недеформируемой рамы: метод set\_frame (необязательно).
-          \item Определение реакций на события: методы add\_hit\_reaction,\\
-          add\_shape\_deformation\_reaction и add\_region\_reaction\\
-          (необязательно).
-        \end{enumerate}
-        Повторяется при расчёте нового кадра:
-        \begin{enumerate}
-          \item Сообщение об ударе: метод hit (возможно, не на каждой итерации).
-          \item Расчёт шага алгоритма.
-          \item Обновление отображаемой сетки.
-        \end{enumerate}
-        Второй и третий пункт будут подробнее описаны в последующих абзацах
-
-        \paragraph{Расчёт шага алгоритма.}
-        В случае однопоточного приложения расчёт шага алгоритма происходит при вызове метода
-        compute\_next\_step. В случае многопоточного ~--- при выполнении следующей
-        последовательности действий:
-        \begin{enumerate}
-          \item Подготовка очереди задач: метод prepare\_tasks.
-          \item Выполнение очередной задачи (может вызываться параллельно из нескольких потоков): метод complete\_next\_task.
-          \item Ожидание окончания расчёта кластеров, после чего можно
-            обновлять отображаемую сетку: метод wait\_for\_clusters.
-          \item Обнаружение произошедших событий: метод
-            react\_to\_events (может выполняться параллельно выполнению последней задачи,
-            как и обновление отображаемой сетки).
-        \end{enumerate}
-
-        \paragraph{Обновление отображаемой сетки.}
-        Чтобы выполнить обновление вершин отображаемой сетки на центральном процессоре, необходимо вызвать метод
-        update\_vertices, передав ему указатель на массив вершин и описатель вершины.
-        Если же используется графический процессор, то вместо этого необходимо
-        получить параметры кластеров (матрицы преобразования вершин и нормалей, а также начальный и
-        текущий центр масс) с помощью соответствующих методов и передать их в константные регистры
-        вершинного шейдера. Важно, что при этом пользователь системы должен выделить в своей структуре,
-        представляющей отображаемую вершину, место для хранения массива индексов кластеров и их
-        числа. Как было показано в п.~\ref{sssec:using_gpu}, эти данные требуются для расчёта
-        позиций отображаемых вершин на графическом процессоре. Пользователь должен также реализовать
-        в своём вершинном шейдере вычисление новых позиций вершин и значений точек и векторов,
-        связанных с вершинами, по формулам \eqref{eq:graphical_pos}--\eqref{eq:normal_vectors}.
-        Для этого вместе с библиотекой предоставляется фрагмент исходного кода шейдера на языке HLSL,
-        выполняющий эти вычисления, так что он может быть вставлен в шейдер, если он также написан
-        на HLSL. В противном случае необходимо портировать этот фрагмент на используемый язык.
-
-    \subsection{Подсистема математических расчётов}\label{sssec:math}
-
-        Для функционирования основного алгоритма, описанного в подразделе \ref{ssec:basic_algorithm}, требуются
-        функции векторной и матричной алгебры для работы с векторами в трёхмерном пространстве и с
-        матрицами $3 \times 3$. Для этого подсистема математических расчётов содержит
-        классы Vector и Matrix, реализующие стандартный набор алгебраических операций. Нетривиальные
-        функции описаны ниже.
-
-        \paragraph{Обращение матрицы.}
-        Обратная матрица находится как транспонированная матрица алгебраических дополнений, делённая
-        на определитель исходной матрицы. Этот метод значительно проще более популярного в~случае
-        больших размерностей метода Гаусса~--- Жордана. Поскольку в~данной работе требуется
-        оперировать только матрицами $3 \times 3$, и обращение матрицы не является узким местом
-        алгоритма, был сделан выбор в~пользу более простого для реализации метода.
-
-        \paragraph{Полярное разложение.}
-        Полярное разложение матрицы $\matx M$ на ортогональную $\matx R$ и симметричную $\matx S$ компоненты
-        $\matx M = \matx R \matx S$ осуществляется следующим образом:
-        \begin{eqnarray*}
-          \matx S & = & \sqrt{\matx{M}^\transposed \matx{M}},\\
-          \matx R & = & \matx M \matx{S}^{-1}.
-        \end{eqnarray*}
-        Вычисление квадратного корня от симметричной матрицы $\matx S$ описано ниже.
-
-        \paragraph{Вычисление функции от симметричной матрицы.}
-        Для вычисления функции от симметричной матрицы она диагонализуется (это всегда возможно,
-        поскольку она симметрична), после чего функция применяется к
-        диагональным элементам, и матрица преобразуется обратно в исходный базис.
-
-        \paragraph{Диагонализация симметричной матрицы.}
-        Приведение к диагональному виду симметричной матрицы осуществляется методом вращений Якоби (англ.
-        \eng{Jacobi rotation})~--- быстрым приближенным итеративным методом \cite{fortran-jacobi}.
-
-    \subsection{Подсистема журналирования и обработки ошибок}
-
-        \includefigure{структура подсистемы журналирования и обработки ошибок.}{logging}
-
-        Данная подсистема обеспечивает обработку ошибок и~предупреждений, возникающих в~процессе
-        работы системы, а~также запись в журнал. В приложении, использующем систему, может
-        быть реализована своя политика журналирования и обработки ошибок. Для удобства интеграции
-        эта подсистема предоставляет пользователю системы возможность определить свои действия по
-        журналированию и обработке ошибок, а также обеспечивает возможность инициировать эти действия
-        отовсюду внутри системы.
-        Основной класс этой подсистемы, Logger, реализует шаблон проектирования <<Одиночка>> (англ.
-        \eng{singleton}), что обеспечивает работу с единственным объектом во всей системе,
-        кроме того, нет необходимости передачи его по всей цепочке вызовов. Чисто виртуальный класс Action
-        используется для задания действия, выполняемого в ответ на то или иное событие (запись в
-        журнал, предупреждение, ошибка). В подсистеме представлены простейшие реализации действий по
-        умолчанию, пользователь же может определить своё действие в~классе, производном от Action. Класс
-        Logger содержит следующие методы:
-        \begin{enumerate}
-          \item Определение действия для конкретного события: метод set\_action.
-          \item Отключение реакции на конкретное событие: метод ignore.
-          \item Вызов действия (используется внутри системы): метод invoke.
-        \end{enumerate}
+        \paragraph{Utilized resources.}
+        Shader constants are stored in the special registers of a graphical processor. Each register
+        represents a four-component vector of floating-point numbers. In this method for each
+        cluster it is necessary to pass into shader two $3 \times 3$ matrices (for transforming
+        points and normals) and two vectors: the initial and the current center of mass. The current
+        center of mass vector can be combined with a point transformation matrix into a single
+        matrix $3 \times 4$. Each matrix occupies 3~registers, therefore a total of 7~registers is
+        required for each cluster. Despite the system can handle any number of clusters, a fixed
+        quantity of available constant registers imposes a limitation on this number, which should
+        be taken into account by the developers of the host application.
 
   \section{Testing}
 
+\begin{original}
       Корректность работы системы была протестирована на двух уровнях: на уровне отдельных функций и на
       уровне системы в~целом. Для тестирования отдельной функции применяется модульное тестирование (англ. \eng{unit testing}):
       пишется несколько тестов, проверяющих корректность её работы в~характерных случаях. Таким
@@ -1355,50 +1279,96 @@
       человеком, разработано простое интерактивное приложение, позволяющее пользователю подвергать
       тестовый объект различным воздействиям и наблюдать изменения, происходящие при этом с
       трёхмерной моделью объекта.
-      \end{original}
+\end{original}
+
+      Correctness of the system operation was tested at two levels: the level of separate
+      functions and the level of the whole system. Unit-testing was applied for testing
+      individual functions: a few tests were written for each of them which ensure that it works
+      correctly in some typical cases. This approach is convenient for testing mathematical
+      functions, utility functions such as logging and error handling, field access methods; for
+      checking handling of incorrect arguments and computing such predictable values as the center
+      of mass or the moment of inertia. Advantages of unit-testing are the ease of
+      localization of a mistake and the possibility to check operational integrity of the system
+      after major changes such as refactoring and optimization. At the same time it is important to
+      test the plausibility of simulated deformation. But it is difficult to formulate a
+      mathematical criteria of plausibility, so unit-tests do not suit for this task. Such testing
+      should be performed by a human, so a simple interactive application was developed. It allows
+      users to expose a test object to different impacts and to observe the consequent changes of 3D
+      model of the object
 
   \section{Results}\label{sec:results}
 
-    \begin{original}
+\begin{original}
     Система моделирования деформаций была реализована в~виде статической
     библиотеки объектных модулей, написанной на языке C++. Было разработано тестовое приложение,
     использующее эту библиотеку, которое средствами API DirectX~9 отображает трёхмерную модель
     объекта и позволяет моделировать его деформации под действием ударов с разных сторон. Трёхмерная
     модель может быть загружена в приложение из файла либо сгенерирована по заданным параметрам при
     запуске.
+\end{original}
 
+    The system for modelling deformations was implemented as a statically-linked library written in
+    C++. A test application using this library was developed. It displays the 3D model of an object
+    by means of DirectX~9 API and performs simulation of its deformations under the action of
+    strokes from different directions. A 3D model may be loaded into the application from a file or
+    generated during the launch according to predefined parameters.
+
+\begin{original}
     С использованием тестового приложения был проведён ряд экспериментов над тестовыми объектами.
     В ходе экспериментов измерена производительность системы, определены оптимальные параметры алгоритма,
     % TODO Денис: сначала даются ограничения, а потом делается система. А у тебя вышло, что ты её сделал, а потом сказал ограничения
     выявлены основные требования к~входным данным и прочие ограничения, а~также обнаружены некоторые
     особенности используемого метода моделирования. Эти результаты представлены в~последующих подразделах.
+\end{original}
 
-    \subsection{Тестовые объекты}\label{ssec:test_objects}
+    \subsection{Test objects}\label{ssec:test_objects}
 
+\begin{original}
       Для проверки правдоподобности деформаций и измерения производительности использовались два
       тестовых объекта: <<Цилиндр>> (с~простой геометрией) и <<Автомобиль>> (с~более сложной
       геометрией), они рассмотрены далее.
+\end{original}
 
-      \subsubsection{Цилиндр}\label{sssec:cylinder}
+      Two test objects were used to check the realism of deformations and to measure the
+      performance: ''Cylinder'' (with simple geometry) and ''Automobile'' (with more complex
+      geometry).
 
+      \subsubsection{Cylinder}\label{sssec:cylinder}
+
+\begin{original}
         В качестве объекта с простой геометрией используется цилиндр, содержащий
         \num{2362} точки в физической модели, сгруппированные в 16 кластеров, и \num{20102} вершины (\num{40398}
         треугольников) в отображаемой сетке. Исходная форма объекта на рис.~\ref{fig:cylinder-initial}.
+\end{original}
 
-        \begin{myfigure}{тестовый объект <<Цилиндр>>}{fig:cylinder}
-          \subfigure[width=0.25\textwidth]{Исходное состояние}{cylinder-initial}    \hspace{1cm}
-          \subfigure[width=0.25\textwidth]{Удар в середину}   {cylinder-deformed-1} \\
-          \subfigure[width=0.25\textwidth]{Удар в край}       {cylinder-deformed-2} \hspace{1cm}
-          \subfigure[width=0.25\textwidth]{Комбинация ударов} {cylinder-deformed-3}
+        As an object with simple geometry here used is a cylinder of \num{2362} points in the
+        physical model grouped into 16 clusters and \num{20102} vertices (\num{40398} triangles) in
+        the visible mesh. Its initial shape is shown in fig.~\ref{fig:cylinder-initial}.
+
+        \begin{myfigure}{test object ''Cylinder''}{fig:cylinder}
+          \subfigure[width=0.25\textwidth]{Initial state}       {cylinder-initial}    \hspace{1cm}
+          \subfigure[width=0.25\textwidth]{Hit at the middle}   {cylinder-deformed-1} \\
+          \subfigure[width=0.25\textwidth]{Hit at the edge}     {cylinder-deformed-2} \hspace{1cm}
+          \subfigure[width=0.25\textwidth]{Combination of hits} {cylinder-deformed-3}
         \end{myfigure}
 
+\begin{original}
         Были протестированы следующие случаи воздействия на объект:
         \begin{enumerate}
           \item Поперечный удар в середину объекта, см. рис.~\ref{fig:cylinder-deformed-1}.
           \item Продольный удар в край объекта, см. рис.~\ref{fig:cylinder-deformed-2}.
           \item Комбинация ударов, см. рис.~\ref{fig:cylinder-deformed-3}.
         \end{enumerate}
+\end{original}
 
+        The following cases of impacts were tested:
+        \begin{enumerate}
+          \item A lateral hit at the middle of the object, see fig~\ref{fig:cylinder-deformed-1}.
+          \item A lateral hit at the edge of the object, see fig.~\ref{fig:cylinder-deformed-2}.
+          \item A combination of impacts, see fig.~\ref{fig:cylinder-deformed-3}.
+        \end{enumerate}
+
+\begin{original}
         Также было проведено исследование зависимости времени расчётов от числа вершин в физической
         модели и отображаемой сетке. Для каждого числа вершин производилось 5 запусков тестового
         % TODO померить действительно в таких условиях
@@ -1411,12 +1381,23 @@
         и операционной системой. Измерения производились на компьютере со следующими
         характеристиками: четырёхъядерный процессор Intel Core 2 Quad Q6600, тактовая частота
         \num{2.4} ГГц, видеоадаптер NVIDIA GeForce 8800 GTX.
-        Результаты измерений представлены в виде графика на рис.~\ref{fig:time-plot}.
+        Результаты измерений представлены в виде графика на рис.~\ref{fig:time-plot-en}.
+\end{original}
 
-        \includefigure[width=1\linewidth]{зависимость времени моделирования от числа физических вершин
-        и времени обновления отображаемых вершин (на центральном либо графическом процессоре) от их
-        числа.}{time-plot}
+        Also the dependence of the computation time on the number of vertices in physical and
+        displayed models was investigated. For each number of vertices the test application was
+        launched 5 times for 10 seconds each time. The object was subjected to the similar actions.
+        Results were averaged between launches. It is necessary to eliminate the influence of
+        external factors such as loading the processor by other applications and the operating
+        system. The following computer was used for testing: quad-core Inter Core 2 Quad Q6600
+        processor with clock speed \num{2.4} GHz, graphical processor NVIDIA GeForce 8800 GTX.
+        Results are presented as a plot, see fig.~\ref{fig:time-plot-en}.
 
+        \includefigure[width=1\linewidth]{dependence of simulation time on the number of physical
+        vertices and of mesh updating time (on central and graphical processors) on the graphical
+        vertices number.}{time-plot-en}
+
+\begin{original}
         \paragraph{Выводы.} Зависимость от числа вершин обоих типов близка к линейной.
         Горизонтальный участок зависимости для отображаемых вершин связан с тем, что, даже когда
         вычисления на графическом процессоре занимают очень мало времени, имеются
@@ -1428,27 +1409,52 @@
         Более того, выполнение этого переноса на графическом процессоре позволяет получить
         существенный выигрыш по времени по сравнению с использованием центрального процессора для
         этой цели.
+\end{original}
 
-      \subsubsection{Автомобиль}\label{sssec:car}
+        \paragraph{Conclusions.} The dependence on the vertices number is close to linear.
+        Horizontal region of the plot for displayed vertices is due to constant overhead for data
+        transfer and rasterization exceeding computation time on low vertices numbers. The plots
+        show that the time cost of simulation per vertex is more than the cost of updating the mesh.
+        It proves the assumptions that using less detailed model for modelling accelerates the
+        process. Moreover, a significant gain can be achieved by using a graphical processor.
 
+      \subsubsection{Automobile}\label{sssec:car}
+
+\begin{original}
         В качестве объекта со сложной геометрией используется автомобиль, содержащий
         \num{9413} точек в физической модели, сгруппированные в~24 кластера, и \num{28241} вершин (\num{34534}
         треугольника) в отображаемой сетке. Исходная форма объекта показана на рис.~\ref{fig:car-initial}.
+\end{original}
 
-        \begin{myfigure}{тестовый объект <<Автомобиль>>}{fig:car}
-          \subfigure[width=0.3\textwidth]{Исходное состояние}{car-initial}    \hspace{1cm}
-          \subfigure[width=0.3\textwidth]{Удар в середину}   {car-deformed-1} \\
-          \subfigure[width=0.3\textwidth]{Удар в край}       {car-deformed-2} \hspace{1cm}
-          \subfigure[width=0.3\textwidth]{Комбинация ударов} {car-deformed-3}
+        As an object with complex geometry here used is a model of automobile containing \num{9413}
+        points in the physical model grouped into \num{24} clusters and \num{28241} vertices
+        (\num{34534} triangles) in the visible mesh. The initial shape of the object is shown in
+        fig.~\ref{fig:car-initial}.
+
+        \begin{myfigure}{test object ''Automobile''}{fig:car}
+          \subfigure[width=0.3\textwidth]{Initial state}       {car-initial}    \hspace{1cm}
+          \subfigure[width=0.3\textwidth]{Hit at the middle}   {car-deformed-1} \\
+          \subfigure[width=0.3\textwidth]{Hit at the edge}     {car-deformed-2} \hspace{1cm}
+          \subfigure[width=0.3\textwidth]{Combination of hits} {car-deformed-3}
         \end{myfigure}
 
+\begin{original}
         Были протестированы следующие случаи воздействия на объект:
         \begin{enumerate}
           \item Поперечный удар в середину объекта, см. рис.~\ref{fig:car-deformed-1}.
           \item Продольный удар в край объекта, см. рис.~\ref{fig:car-deformed-2}.
           \item Комбинация ударов, см. рис.~\ref{fig:car-deformed-3}.
         \end{enumerate}
+\end{original}
 
+        The following cases of impacts were tested:
+        \begin{enumerate}
+          \item A lateral hit at the middle of the object, see fig~\ref{fig:car-deformed-1}.
+          \item A lateral hit at the edge of the object, see fig.~\ref{fig:car-deformed-2}.
+          \item A combination of impacts, see fig.~\ref{fig:car-deformed-3}.
+        \end{enumerate}
+
+\begin{original}
         Чтобы проверить масштабируемость многопоточного алгоритма, было проведено сравнение быстродействия
         версий тестового приложения с разным числом рабочих потоков, от 1 до 4, на четырёхъядерном
         процессоре. Как было показано в п.~\ref{sssec:parallel_tasks}, вычисления разбиваются на два
@@ -1459,17 +1465,35 @@
         Измерения производились на компьютере со следующими характеристиками: четырёхъядерный
         процессор Intel Core i5-750, тактовая частота \num{2.66} ГГц, видеоадаптер NVIDIA GeForce GTS 250.
         Полученные результаты представлены на рис.~\ref{fig:thread-plots}: диаграмма на
-        рис.~\ref{fig:time-plot-threads} показывает зависимость времени расчётов от числа потоков, а
-        график на рис.~\ref{fig:speedup-plot}~--- выраженное в процентах отношение затрат времени
+        рис.~\ref{fig:time-plot-threads-en} показывает зависимость времени расчётов от числа потоков, а
+        график на рис.~\ref{fig:speedup-plot-en}~--- выраженное в процентах отношение затрат времени
         однопоточной версией к затратам при нескольких параллельных потоках, показывающее, во сколько раз
         многопоточная версия системы быстрее однопоточной.
         % TODO время расчётов на GPU тоже бы
+\end{original}
 
-        \begin{myfigure}{зависимость скорости вычислений от числа потоков, выполняющихся на разных ядрах процессора}{fig:thread-plots}
-          \subfigure[width=0.45\textwidth]{Время вычислений}{time-plot-threads}
-          \subfigure[width=0.45\textwidth]{Отношение скоростей вычислений многопоточной и однопоточной версии}{speedup-plot}
+        In order to check the scalability of multi-threaded algorithm the performance of test
+        application versions with different count of working threads (from 1 to 4) was compared
+        using a quad-core processor. As it was explained in sec.~\ref{sssec:parallel_tasks}, the
+        computation is divided into two stages, and only the tasks of the first stage are
+        independent and are executed in parallel, while the rest of computation is done only after
+        the end of the first stage. That is why the time of each stage was measured. It was expected
+        that for the first stage it would decrease in inverse proportion with the number of threads
+        and for the second stage it would remain constant. The experiments were conducted using the
+        following computer: a quad-core Intel processor Core i5-750 with clock speed \num{2.66} GHz,
+        a graphical processor NVIDIA GeForce GTS 250. The results are presented in
+        fig.~\ref{fig:thread-plots}: diagram in fig.\ref{fig:time-plot-threads-en} shows the dependence
+        of the time of computation on the number of threads, and
+        fig.~\ref{fig:speedup-plot-en} contains the plot the ratio of execution time between single-threaded and
+        multi-threaded versions showing how much times faster the multi-threaded version is.
+
+        \begin{myfigure}{dependence of computational speed on the number of threads executed on different processor cores}{fig:thread-plots}
+          \subfigure[width=0.45\textwidth]{Computation time}{time-plot-threads-en}
+          \subfigure[width=0.45\textwidth]{Speeds ratio for multi-threaded and single-threaded
+          versions}{speedup-plot-en}
         \end{myfigure}
 
+\begin{original}
         \paragraph{Выводы.}
         Наблюдается рост скорости той части вычислений, которая выполняется параллельно, при увеличении числа потоков.
         Характер этого роста близок к линейному, но при одновременной работе всех четырёх
@@ -1477,223 +1501,41 @@
         применение многопоточности в данной системе при использовании её на многоядерных процессорах, но не
         является максимальным достижимым. Этот факт указывает на то, что имеется возможность для
         дальнейшего улучшения реализации параллельных вычислений.
+\end{original}
 
+        \paragraph{Conclusions.}
+        Observed is the growth of speed of paralleled part of computations with the increasing
+        of threads count. The nature of this growth is close to linear, but when all four cores work
+        simultaneously the achieved acceleration is only \num{2.2} times. Such acceleration
+        justifies the application of multi-threading in this system if it is used on multi-core
+        processors, but it is not the theoretical maximum. It points to the fact that the
+        implementation of parallel computing in the system can be further improved.
+
+\begin{original}
         В~целом, было показано, что поставленная цель достигнута: система моделирует визуально
         правдоподобные деформации объектов, имеющих типичную для приложений виртуальной реальности
         степень детализации, и на расчёты требуется менее 3 мс на кадр. Тем не менее, для этого
         должны быть соблюдены определённые условия, подробно описанные далее.
+\end{original}
 
-    \subsection{Требования к входным данным}\label{ssec:requirements}
+        As a whole, the tests showed that the goal of this work is achieved: the system does
+        simulate visually plausible deformations of the objects having the level of detail typical
+        for virtual reality applications and takes less than 3 ms for computing a frame.
 
-      \paragraph{Требования к представлению объекта.}
-      Жёсткость конкретной области поверхности объекта существенно зависит от плотности точек в этой
-      области. Во-первых, если между соседними точками имеется значительный промежуток, то изгиб
-      объекта в~этом промежутке не может быть смоделирован из-за отсутствия в~нём точек. Во-вторых,
-      проблема возникает, если значительная по объёму часть кластера содержит намного меньше точек,
-      чем остальная часть кластера. Тогда при сопоставлении формы вклад этого небольшого числа точек будет
-      также незначителен, и, несмотря на сильное отклонение в этой области, деформация всего
-      кластера может оказаться слабой. Таким образом, чтобы моделирование было реалистичным,
-      фрагменты модели, состоящие из однородного материала, должны представляться набором точек
-      равномерной плотности.
+\begin{original}
 
-      \paragraph{Требования к разбиению на кластеры.}
-      Используемый метод сопоставления формы накладывает ограничение на исходную форму, образуемую
-      вершинами одного кластера. При сопоставлении формы вычисляется оптимальное линейное преобразование
-      множества точек, входящих в кластер, переводящее его из исходного состояния в наиболее близкое
-      к текущему. Это преобразование будет неоднозначным, если множество точек лежит в одной
-      плоскости или на одной прямой, будь то в исходном или текущем состоянии. Если такую форму
-      имеет текущее состояние кластера, сопоставление формы на этом шаге может быть пропущено, а значений
-      целевых позиций могут быть взяты с прошлого шага. Если же проблема заключается в
-      исходной форме, сопоставление формы не сможет быть выполнено ни на одном шаге, поэтому система сообщит
-      об ошибке при попытке создания объекта, содержащего хотя бы один такой некорректный кластер.
-      В этом случае нужно либо изменить разбиение на кластеры, либо добавить в некорректный кластер
-      дополнительные точки, например, разделив плоскость на два близких слоя с~массой, равной
-      половине исходной массы.
+  \section{Further work}
 
-    \subsection{Особенности используемого метода}\label{ssec:special_features}
-
-      Поскольку основной алгоритм является геометрическим, при определённых условиях моделирование
-      может быть нереалистичным. Далее описаны некоторые характерные свойства этого алгоритма и их
-      влияние на реалистичность деформаций.
-
-      \paragraph{Свойства области пересечения кластеров.} Было обнаружено, что удар в область,
-      принадлежащую только одному кластеру, и удар в область пересечения кластеров оказывают
-      различное влияние на объект. А именно, во втором случае область распространения деформаций
-      оказывается больше из-за того, что большее число кластеров изменяет свою форму. Это свойство
-      может быть использовано, чтобы моделировать ребро жёсткости областью пересечения соседних
-      % TODO подумать, насколько это реально
-      кластеров: её собственная форма будет изменяться слабо (поскольку входящие в неё кластеры
-      будут примерно одинаково изменять свою форму), но при этом удар непосредственно в неё будет
-      оказывать большое влияние на соприкасающиеся кластеры. Если же это не требуется, такое
-      свойство может быть нежелательным побочным эффектом. В дальнейшем планируется предусмотреть
-      возможность ограничения области распространения удара, чтобы исключить эту проблему.
-
-      \paragraph{Невозможность сложных деформаций отдельного кластера.} В связи с тем, что для сохранения
-      деформируемого состояния каждого кластера используется матрица $3 \times 3$, задающая
-      линейное преобразование, множество возможных деформаций отдельного кластера ограничено комбинациями
-      поворотов, сжатий и продольных сдвигов. Это может быть полезным, если не требуется
-      моделировать изгиб частей объекта, задаваемых кластерами. Но в большинстве случаев это не
-      так, поэтому требуется учащение разбиения на кластеры в местах, где моделирование
-      изгибов необходимо.
-
-    \subsection{Оптимальные значения параметров}\label{ssec:optimal_parameters}
-
-      Характерным свойством геометрических алгоритмов является большое число параметров, изменяя
-      которые, можно существенно влиять на процесс моделирования.  В данном случае такими
-      параметрами для представления объекта являются распределение плотности точек в
-      пространстве, форма и число кластеров, размер и положение недеформируемых частей, а также
-      численный параметр~--- коэффициент затухания колебаний. Каждый кластер также имеет свой набор
-      параметров, влияющих на моделирование неупругости: порог деформации, после которого начинает
-      проявляться неупругость, скорость изменения формы при этом, а также максимальная величина
-      остаточной деформации. В процессе исследования были определены допустимые интервалы этих
-      параметров, их физический смысл и влияние на характер моделируемых деформаций.
-
-      \paragraph{Плотность точек и разбиение на кластеры} уже были рассмотрены с точки зрения
-      их влияния на деформации в подразделах~\ref{ssec:requirements} и \ref{ssec:special_features}.
-      Осталось упомянуть о~том, какое число кластеров является типичным для
-      деформируемого объекта, используемого в~приложении виртуальной реальности. Тестовый
-      объект <<Автомобиль>> из п.~\ref{sssec:car} был разбит на кластеры следующим образом: на 6
-      равных частей по длине, на 2 по ширине и высоте (пропорционально отношению соответствующих
-      линейных размеров, итого 24), величина области перекрытия~--- 40\% от ширины кластера.
-      Как показало тестирование (см. рис.~\ref{fig:car}), такого числа кластеров достаточно для правдоподобного моделирования, но
-      в~отдельных случаях движение кластера как целого может быть заметно. Поэтому в~общем случае
-      имеет смысл увеличивать количество кластеров до тех пор, пока достаточная детальность
-      деформаций не будет достигнута, либо пока не начнут действовать ограничения, описанные ниже в
-      п.~\ref{sssec:limitations}.
-
-      \paragraph{Коэффициент затухания колебаний} ($k$) был введён в п.~\ref{sssec:proposed_changes}.
-      Он определяет, насколько сильно будут подавляться отклонения скоростей отдельных вершин: $k = 0$
-      соответствует отсутствию затухания, $k = 1$~--- полному подавлению отклонений. При $k = 1$
-      объект ведёт себя как абсолютно твёрдое тело. При уменьшении он становится мягче (сильнее
-      деформируется при одинаковом воздействии), а колебания, возникающие после удара по объекту,
-      затухают дольше. При стремлении его к нулю может возникнуть нестабильность из-за того, что
-      колебания вообще не будут затухать, либо даже начнут увеличиваться в~амплитуде. В~проведённых
-      экспериментах это происходило при значениях $k < \num{0.2}$. Наиболее подходящее для
-      конкретного объекта значение нужно подбирать опытным путём. Для~тестовых объектов
-      в подразделе~\ref{ssec:test_objects} деформации выглядели наиболее реалистично при следующих
-      значениях этого параметра: $k = \num{0.7}$ для объекта <<Цилиндр>> и $k = \num{0.3}$ для
-      объекта <<Автомобиль>>.
-
-      \paragraph{Параметры неупругости кластера} напрямую не связаны с~физическими характеристиками
-      материала, поскольку для определения меры деформации кластера используется только матрица его
-      текущей деформации (см. п.~\ref{sssec:original_algorithm}). Поэтому их величины для каждого
-      материала нужно подбирать экспериментально. Их изменения оказывают следующее влияние на
-      моделирование:
-      \begin{enumerate}
-        \item Порог неупругости $d_{неупр}$ определяет меру деформации, при превышении которой
-        деформация становится необратимой. Минимальное значение~--- 0, а чем оно больше, тем больше
-        может быть сила удара, не оставляющего никаких последствий.
-        \item Скорость изменения формы $u$ должна быть строго больше нуля, чтобы остаточная
-        деформация сохранялось. Чем она больше, тем быстрее форма кластера приходит в~равновесие, то
-        есть меньше длятся колебания. Но если величина $u \Delta t$ превышает единицу, то
-        изменение остаточной деформации на одном шаге становится больше величины текущей деформации,
-        то есть остаточная деформация начинает опережать текущую, что приводит к ошибочным расчётам.
-        Таким образом, $0 < u \le 1/\Delta t$.
-        \item Максимальная мера остаточной деформация $d_{max}$ ограничивается, чтобы предотвратить
-        слишком сильное изменение формы отдельного кластера, которое будет выглядеть не реалистично.
-        Должна быть больше $d_{неупр}$, чтобы остаточная деформация сохранялась.
-      \end{enumerate}
-      Для тестовых объектов в подразделе~\ref{ssec:test_objects} эти параметры были одинаковы для
-      всех кластеров и имели следующие значения: $d_{неупр} = \num{0.1}$, $u = 60$ при
-      $\Delta t = \num{0.01}$, $d_{max} = \num{1.5}$.
-
-    \subsection{Ограничения}\label{sssec:limitations}
-
-      Реализация системы не имеет принципиальных ограничений на количество вершин, кластеров и других сущностей,
-      используемых при моделировании, поскольку они хранятся в массивах динамически изменяемого размера.
-      Тем не менее, в~зависимости от характеристик компьютера, на котором используется система, при слишком
-      больших значениях ресурсы этого компьютера могут быть исчерпаны, либо быстродействие системы
-      может оказаться ниже требуемого. Эти случаи рассмотрены в последующих пунктах данного
-      подраздела.
-
-      Кроме того, ограниченно максимальное число кластеров, в которое может входить одна физическая
-      или отображаемая вершина, что было объяснено в п.~\ref{sssec:representation}.
-
-      \subsubsection{Скорость расчёта}\label{sssec:speed_limit}
-
-        Как уже говорилось в разделе~\ref{sec:task}, расчёт одного кадра в приложении виртуальной реальности должен
-        занимать не более 33~мс, из которых на расчёт деформаций отводится обычно около 3--5 мс. Рис.~\ref{fig:time-plot}
-        из п.~\ref{sssec:cylinder} показывает пример роста времени расчётов в зависимости от основных параметров,
-        влияющих на быстродействие: числа физических и отображаемых вершин в представлении объекта.
-        Таким образом, для достижения требуемого времени расчётов можно манипулировать обоими
-        параметрами. Причём, поскольку в случае физических вершин рост намного быстрее, значительное
-        уменьшение их числа является хорошим способом повышения быстродействия без уменьшения
-        детализации отображаемой модели объекта. Однако качество моделирования деформаций при этом
-        может снизиться.
-
-      \subsubsection{Объём используемой оперативной памяти}
-
-        Наибольший объём памяти в системе требуется для хранения физических и отображаемых вершин в
-        силу их большого числа. Размер структур, представляющих каждый вид вершин, зависит от
-        максимального числа кластеров, в которое может входить вершина, поскольку, как было показано
-        в п.~\ref{sssec:representation}, каждая из вершин хранит статический массив соответствующего
-        размера. Далее предполагается, что это число равно 8, оптимальному в большинстве случаев
-        согласно рассуждениям в п.~\ref{sssec:representation}.
-
-        % TODO перепроверить цифры, подумать об оптимизации
-        Структура, представляющая физическую вершину, занимает в памяти 312 байт. Например, если
-        физическое представление объекта должно занимать не более 10 мегабайт, то максимальное
-        возможное число вершин в этом представлении~--- \num{32051}. Как уже было сказано выше,
-        в п.~\ref{sssec:speed_limit}, это не
-        является серьёзным ограничением, поскольку число физических вершин может быть уменьшено без
-        влияния на детализацию отображаемого объекта.
-
-        Затраты памяти на хранение информации об отображаемых вершинах зависят от способа вычисления
-        их позиций. Если оно выполняется на графическом процессоре, то информация об отображаемых
-        вершинах не требуется в~процессе моделирования, и используется только при создании объекта.
-        При этом нужно 48 байт на каждую вершину, причём эта память будет освобождена после
-        завершения инициализации объекта. Кроме этого, как уже говорилось в п.~\ref{sssec:usage},
-        в структуре, используемой в приложении для представления отображаемой вершины, пользователь
-        должен выделить место для хранения 8 индексов и их числа. Если число кластеров не больше
-        255 (что является разумным ограничением, поскольку это больше типичного числа, приведённого
-        в подразделе~\ref{ssec:optimal_parameters}),
-        то для хранения индексов и их числа можно использовать 1 байт. Таким образом,
-        размер пользовательской структуры увеличивается на 9 байт при использовании вычислений на
-        графическом процессоре. Это нужно учитывать, если ресурсы оперативной памяти или памяти
-        видеоадаптера уже почти исчерпаны, и такое увеличение затрат недопустимо.
-
-        Если же обновление отображаемой сетки выполняется на центральном процессоре, необходимо
-        сохранять информацию обо всех связанных с отображаемой вершиной векторах и точках, а~также об
-        ортогональности каждого вектора (необходимость этой информации была объяснена подробнее в
-        п.~\ref{sssec:using_gpu}). Допустим, с каждой отображаемой вершиной может быть связано
-        не более 5 векторов и 5 точек, тогда размер структуры, представляющей эту вершину в~системе,
-        составит 280 байт. Если стоит требование, что максимальное количество памяти, расходуемой на
-        графическое представление объекта равно, например, 10 мегабайтам, то число вершин не может
-        быть больше \num{35714}. Этого может быть недостаточно для отображения объекта со сложной
-        геометрией, поэтому, в отличие от физических вершин, недостаток памяти для хранения
-        отображаемых вершин может быть серьёзной проблемой, если обновление их позиций выполняется
-        на центральном процессоре.
-
-      \subsubsection{Ограничения графического процессора}
-
-        Число константных регистров вершинного шейдера ограничено. В п.~\ref{sssec:using_gpu} было
-        показано, что на каждый кластер требуется 7 таких регистров. Таким образом, число регистров
-        вершинного шейдера накладывает ограничение на максимальное возможное число кластеров в
-        представлении объекта.
-
-        Например, в графических адаптерах, которые поддерживают спецификацию \eng{Shader Model~4},
-        гарантируется наличие \num{65536} таких регистров. Максимальное возможное число
-        кластеров при этом равно $\lfloor \num{65536}/7 \rfloor = \num{9362}$. Как было показано
-        в~разделе~\ref{sec:results}, это значительно больше оптимального числа кластеров для
-        типичного моделируемого объекта. Таким образом, при использовании \eng{Shader Model~4}
-        количество регистров не накладывает существенного ограничения на число кластеров. Однако
-        версии DirectX 10 и 11, поддерживающие \eng{Shader Model~4}, ещё недостаточно широко
-        распространены \cite{steam-hardware}.
-
-        Если же видеоадаптер поддерживает только менее современную спецификацию \eng{Shader
-        Model~3}, то гарантированно он имеет только 256 константных регистров вершинного шейдера.
-        Поэтому максимальное теоретически возможное число кластеров~--- это $\lfloor 256/7 \rfloor = 36$.
-        В~реальности оно ещё меньше, поскольку часть регистров требуется приложению для
-        расчётов, связанных с~получением изображения. При использовании данной системы в~режиме
-        вычислений на графическом процессоре её пользователь должен учитывать это ограничение и,
-        если оно является неприемлемым, использовать режим вычислений на центральном процессоре.
-
-  \section{Дальнейшая работа}
-
+\begin{original}
     В дальнейшем планируется работа по ослаблению требований, перечисленных
     в подразделе~\ref{ssec:requirements}. В~частности, описанные там же действия для коррекции
     представления объекта и разбиения на кластеры могут выполняться автоматически.
+\end{original}
 
+    In future the work is planned to reduce the limitation of algorithms, including automatic
+    correction of object representation and decomposition into clusters.
+
+\begin{original}
     Алгоритм имеет довольно много входных параметров, включая разбиение на кластеры и
     различные численные параметры, описанные в подразделе~\ref{ssec:optimal_parameters}. Задание их вручную в коде для каждого
     объекта является неудобным. Планируется разработка программного модуля для редактора
@@ -1701,11 +1543,18 @@
     будет разработан собственный формата файла для хранения этих параметров, разбор которого будет
     осуществляться внутри данной системы. Это позволит применять систему в~реальных приложениях
     виртуальной реальности, которые обычно содержат множество разнообразных деформируемых объектов.
-    \end{original}
+\end{original}
+
+    The algorithm has many input parameters including decomposition into clusters and different
+    numeric parameters. Defining them by hand in the code for each object is inconvenient. It is
+    planned to develop a plug-in module for 3D graphics editor Autodesk 3ds Max for defining this
+    parameters using intuitive graphical interface. A special file format for storing this
+    parameters will be developed. This will allow using this system in real virtual reality
+    applications which usually include lots of different deformable objects.
 
   \section{Conclusion}\label{sec:conclusion}
 
-    \begin{original}
+\begin{original}
     % TODO Можно цифры ещё сюда
     В данной работе ставилась цель разработать систему моделирования деформаций неупругих тел
     в~реальном времени, ориентированную на применение в~приложениях виртуальной реальности. Эта цель
@@ -1713,7 +1562,16 @@
     высокое быстродействие и удобный для интеграции интерфейс, а~также применение параллельных
     вычислений и отказ от использования предварительно рассчитанных деформаций. Более того,
     использование графического процессора позволило значительно улучшить быстродействие.
+\end{original}
 
+    For this work the goal was set to develop a system for modeling plastic deformations of bodies
+    in real-time oriented to using in virtual reality applications. This goal was achieved and the
+    requirements listed in sec.~\ref{sec:task} were met, including high performance and the
+    interface ready for easy integration, as well as using parallel computing and rejection of using
+    precomputed deformations. Moreover, the application of a graphical processor significantly
+    improved the performance.
+
+\begin{original}
     Предусмотрено тестирование системы с~помощью модульных тестов. Также было разработано простое интерактивное
     приложение, использующее возможности системы, чтобы моделировать деформаций предварительно
     заданного объекта. С помощью этого приложения была протестирована правдоподобность деформаций и
@@ -1723,7 +1581,15 @@
     Также были исследованы возможности дальнейшего развития и улучшения системы. В частности, планируется разработка
     дополнительных инструментов, упрощающих использование системы разработчиками приложений
     виртуальной реальности.
-    \end{original}
+\end{original}
+
+    The system was tested using unit-tests. Also developed was a simple interactive application using
+    the abilities of the system for simulating deformations of a predefined object. It was used to
+    test plausibility of simulation and to investigate the performance of the system. Given properly
+    adjusted parameters modelled deformations are plausible enough for virtual reality applications.
+    Possibilities of further development and improvement of the system were analysed as well. For
+    example, the development of additional instruments simplifying the use of this system by virtual
+    reality applications developers is planned.
 
   \begin{flushleft}
     \bibliography{../../biblio/my}
