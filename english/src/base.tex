@@ -172,10 +172,10 @@
     виртуального мира: их движение, столкновения, деформации и~разрушение.
 \end{original}
 
-    Virtual reality applications become extremely wide-spread nowadays. Two basic types of such
-    applications are computer games and training simulators. Despite of different uses, this two
+    Virtual reality applications become extremely popular nowadays. Two basic types of such
+    applications are computer games and training simulators. Despite of different goals, these two
     types of applications have a lot in common, because in both cases it is necessary to create
-    illusion of presence. It requires not only to generate photo-realistic images, but also model
+    illusion of presence. It requires not only to generate photo-realistic images, but also to model
     interactions of virtual world objects (their motion, collisions, deformations and destruction)
     in a verisimilar manner.
 
@@ -195,10 +195,10 @@
     applied in Computer Aided Design (CAD) systems and for making special effects for motion
     pictures.  Different approaches can be applied depending on task. Namely, CAD systems require
     maximal accuracy of computation, while for films and virtual reality visual plausibility is
-    enough. Moreover, while % repetition of while (?)
-    computation for CAD software and special effects may take a long time, a~step of computation in in interactive
-    applications should take no longer than inter-frame interval to ensure smooth animation and
-    eliminate lags between interaction with an object and its deformation.
+    enough. Moreover, while computation for CAD software and special effects may take a long time,
+    a~step of computation in interactive applications should take no longer than the interval
+    between frames to ensure smooth animation and eliminate lags between interaction with an object
+    and its deformation.
 
 \begin{original}
     Жёсткое требование быстродействия в приложениях реального времени не~только вынуждает
@@ -215,8 +215,8 @@
     отображения.
 \end{original}
 
-    Severe performance requirements of virtual reality applications not only makes developers use
-    simplified physical models of deformations, but also significantly limits the way of
+    Severe performance requirements of virtual reality applications not only make developers use
+    simplified physical models of deformations, but also significantly limit the way of
     representation of modelled objects. Usually it is represented in a discrete way: as a mesh, a
     grid or a set of unconnected points. The time of computations is directly related (typically,
     linearly \cite{mueller-meshless}) to the number of points in such representation.
@@ -244,8 +244,8 @@
     интерес представляют решения, в которых моделирование деформаций происходит во время исполнения.
 \end{original}
 
-    There are different approaches to modeling of deformations in real-time. In the simplest case
-    performance limitations can be left out by using precomputed deformed states for some limited
+    There are different approaches to modeling deformations in real-time. In the simplest case
+    performance limitations can be left out by using precomputed deformed states for some restricted
     set of predefined strokes. In real-time, one of these precomputed states (or an interpolation
     between several nearest ones) is chosen depending on which predefined stroke is the most similar
     to happened one. In this case using relatively complex algorithms is allowed, such as
@@ -272,15 +272,15 @@
     коэффициентов упругости пружин так, чтобы добиться требуемых свойств моделируемого материала.
 \end{original}
 
-    One of the most simple models of deformable body is the aforementioned mass-spring system, in
-    which a body is represented as dimensional (usually, regular and cubical) grid of mass points,
+    One of the most simple models of deformable body is the aforementioned mass-spring system.
+    A body is represented as a dimensional grid of mass points (usually, regular and cubical),
     which are connected with springs, acting according to Hooke's law. Being very simple for
-    implementation, this model, however, has some certain drawbacks. It models object behaviour not
+    implementation, this model, however, has certain drawbacks. It models object behaviour not
     very precise, and the result depends significantly on the grid shape and spring locations, as well as on
     spring constant values of each particular spring, which are not connected directly with real
     properties of modeled material \cite[sec. 3.5.2]{mueller-physmodels}. Another flaw it that an
     excitation applied locally spreads through object slowly, covering one step of the grid at a
-    step of the algorithm \cite[sec. 4.4.1]{parent-animation}. Moreover, additional work of converting
+    step of the algorithm \cite[sec. 4.4.1]{parent-animation}. Moreover, it requires additional work of converting
     superficial mesh of triangles (a typical representation for 3D objects in software) into regular
     grid and for adjusting spring constants to achieve required properties of modelled material.
 
@@ -302,7 +302,7 @@
     Naturally, this method cannot be used as it is in virtual reality applications, because
     engineering calculations may last some hours or even days. However, the models exist which
     propose different simplifications of this method, making real-time computation possible.
-    Deformations are simulated much more precisely than in case of mass-spring systems, but even
+    Deformations are simulated much more precisely than in the case of mass-spring systems, but even
     a~simplified algorithm requires more time for computation. The~paper \cite{mueller-stable}
     presents an example of such model.
 
@@ -318,9 +318,9 @@
 
     The separate group of methods are formed by so called geometric algorithms. They do not simulate
     laws of physics directly. Generally, the object is represented as a particle system, where
-    the movement of each particle is integrated regardless of the others first. At the next step
+    the movement of each particle is at first integrated regardless of the others. At the next step
     different physically motivated restrictions are applied to the entire object, such as
-    conservation of shape, volume, momentum etc. They make resulting deformation plausible. Shape
+    conservation of shape, volume, momentum etc. They make resulting deformation look plausible. Shape
     matching method \cite{mueller-meshless} is one of many geometric algorithms. It has a good
     performance while being more stable and configurable than a mass-spring system.
 
@@ -332,9 +332,9 @@
     К~системе предъявляются следующие требования.
 \end{original}
 
-    The goal of this work is development of the system for modeling deformation of bodies to be
-    applied in virtual reality applications: computer games and training simulators.
-    Following requirements should be met.
+    The goal of this work is to develop the system for modeling deformation of bodies applicable for
+    virtual reality applications: computer games and training simulators. The following requirements
+    have to be met.
 
     \subsection{Requirements}
 
@@ -345,7 +345,7 @@
     одним их основных геометрических примитивов для графических процессоров.~\cite{nvidia-tutorial}
 \end{original}
 
-    Triangle meshes should be used as internal representation, or the possibility of conversion from
+    Triangle meshes should be used as internal representation, otherwise the possibility of conversion from
     such format should be available, because it is a common way of representing visible objects in
     virtual reality applications. That is because triangle is one of the basic geometric primitives
     for graphical processors~\cite{nvidia-tutorial}.
@@ -367,12 +367,12 @@
 \end{original}
 
     The system should be fast enough to provide real-time simulation. A frame rate of 30 frames per
-    second or higher is required for user's comfort and feeling of realism of the simulated
+    second or higher is required for the user's comfort and feeling of realism of the simulated
     world~\cite{claypool-framerate}. Therefore, all computations necessary for getting the next
-    frame should take less than 33~ms. Since global motion and 3D-graphics are usually of
+    frame should take less than 33~ms. Since the global motion and 3D-graphics are usually of
     higher priority than deformations, only a little fraction of this time span is given for
-    simulating deformations, about 3-5~ms. To make this fast simulation possible even for objects
-    defined as a mesh with lots of vertices, there should be a possibility to use less detailed
+    simulating deformations, about 3-5~ms. To make such fast simulation possible even for objects
+    defined by a mesh with lots of vertices, there should be a possibility to use less detailed
     representation of the object for simulation. Displayed mesh of higher resolution in this case
     should only be updated to make it repeat already calculated deformation.
 
@@ -383,7 +383,7 @@
 \end{original}
 
     Multi-core central processors become more and more widespread nowadays~\cite{steam-hardware}. In
-    order to effectively exploit computational power of such processors the computations should be
+    order to effectively exploit computational power of such processors the calculations should be
     able to run in parallel.
 
 \begin{original}
@@ -436,14 +436,13 @@
 
     In order to achieve the goal of this work the following objectives should be completed:
     \begin{enumerate}
-      \item To develop and implement the algorithm for modelling plastic deformations of bodies
+      \item To develop and implement a real-time algorithm for modelling plastic deformations of bodies
         containing undeformable parts.
-      \item To implement the interface of two-way communication with the application the system will
-        embedded into, including:
+      \item To implement an interface for two-way communication with the host application, including:
         \begin{enumerate}
-          \item conversion of the object representation used in the application into internal representation;
+          \item conversion of the object representation used in the host application into internal representation;
           \item obtaining the information about collisions with the object and the forces applied to it;
-          \item notifying the application about the events happened during deformation
+          \item notifying the host application about the events happened during deformation
           \item updating the displayed mesh.
         \end{enumerate}
       \item To provide support for using parallel computing.
@@ -504,7 +503,7 @@
 \end{original}
 
         \paragraph{Input and output.} An object is represented by an array of points, grouped into
-        overlapping sets here called clusters. Therefore, the information about connections between
+        overlapping sets here called \emph{clusters}. Therefore, the information about connections between
         vertices is not required. An object represented this way is given to the algorithm as the
         input, as well as the information about applied forces. Time step value is set. The results
         of single iteration of algorithm are positions of points representing object at the next
@@ -532,18 +531,18 @@
 \end{original}
 
         \paragraph{General scheme of the algorithm.} Velocities and positions of these mass-points
-        are integrated regardless of each other using explicit Euler method. Then each cluster is
+        are integrated regardless of each other using the explicit Euler method. Then each cluster is
         subjected to shape matching operation: a new position of the center of mass of the cluster
         is found, as well as an optimal linear transformation $\matx A$ which converts the initial
         shape of the cluster into the closest to the current shape. Let $\vect{x}^0_i$ and
-        $\vect{x}_i$ be the initial and the current position of $i^{th}$ point, $\vect{x}^0_{c.m.}$
+        $\vect{x}_i$ be the initial and the current position of $i^{th}$ point; $\vect{x}^0_{c.m.}$
         and $\vect{x}_{c.m.}$ be the initial and the current center of mass of the cluster. By
         $\vect{q}_i = \vect{x}^0_i - \vect{x}^0_{c.m.}$ and $\vect{p}_i = \vect{x}_i -
         \vect{x}_{c.m.}$ denote the initial and the current offset of point relative to the center
         of mass of the cluster. As a criteria of optimality for the transformation $\matx A$ used is
         the sum of squared differences between transformed initial positions and current positions:
         $\sum_i m_i (\matx A \vect{q}_i - \vect{p}_i )^2$. It was shown in~\cite{mueller-meshless}
-        that this term is maximized when
+        that this term is minimized when
         \begin{equation}
           \matx A = \left( \sum_i m_i \vect{p}_i \vect{q}_i^\transposed \right)
                     \left( \sum_i m_i \vect{q}_i \vect{q}_i^\transposed \right)^{-1}.
@@ -624,13 +623,13 @@
           \matx A = \matx R \matx S,
         \end{equation}
         where $\matx R$ is an orthogonal matrix. The choice of symmetric component is determined by
-        the fact that it doesn't include rotations. Rotations doesn't change shape and thus should
+        the fact that it doesn't include rotations. Rotations do not change the shape and thus should
         not be considered in the measure of deformation. When the described measure exceeds $d_{inelast}$
-        the matrix $\matx{S}^{res}$ should update in order to save a portion of current deformation:
+        the matrix $\matx{S}^{res}$ should be updated in order to save a portion of current deformation:
         \begin{equation}
           \matx{S}^{res} = \left(E + u \Delta t (\matx S - \matx E) \right) \matx{S}^{res}.
         \end{equation}
-        Here $\Delta t$ is a time step, and the parameter $u$ describes how fast residual
+        Here $\Delta t$ is a time step, and $u$ is a parameter describing how fast residual
         deformation is changed. Maximum residual deformation is limited: when
         $\|\matx{S}^{res} - \matx E\|_2$ reaches extreme value of $d_{max}$ the matrix
         $\matx{S}^{res}$ ceases to change. Residual deformation is then taken into account during
@@ -656,11 +655,11 @@
 
         The changes are made to the basic algorithm in order to adapt it to the current conditions.
         First, simulation of inelastic bodies requires damping of arising oscillations. Second, the
-        system is responsible for modeling only deformations, while global motion and collision
+        system is responsible for modeling deformations only, while the global motion and collision
         detection are computed separately in the host application. Consequently, the computation of
         deformations should be made in local coordinates: in a non-inertial reference frame
         associated with the center of mass of the object where it neither move or rotate. Further
-        this reference frame is called the \emph{center-of-momentum frame.}
+        this reference frame is called the \emph{center-of-momentum frame} for short.
 
 \begin{original}
         \paragraph{Демпфирование.} Чтобы поведение неупругого тела выглядело правдоподобно,
@@ -695,11 +694,11 @@
 
         \paragraph{Damping.}
         In order that the behavior of inelastic body looks plausible it is necessary that only
-        oscillations are damped while global motion conserves its parameters. For that used is the
+        oscillations are damped while global motion conserves its parameters. Used here is the
         method described in~\cite[sec.~3.5]{mueller-position-dynamics}. At first the motion of the
         body as a whole is singled out: the velocity of the center of mass $\vect{v}_{c.m}$ and the
-        angular velocity $\vect{\omega}$ are computed. In order to do this the center of mass and
-        the moment of inertia tensor $\matx I$ (a $3 \times 3$ matrix) are found:
+        angular velocity $\vect{\omega}$ are computed. In order to do this the center of mass
+        $\vect{x}_{c.m.}$ and the moment of inertia tensor $\matx I$ (a $3 \times 3$ matrix) are found:
         \begin{eqnarray*}
           \vect{x}_{c.m.} & = & \frac{\sum_i m_i \vect{x_i}}{\sum_i m_i},\\
           \vect{r}_i      & = & \vect{x}_i - \vect{x}_{c.m.},\\
@@ -781,7 +780,7 @@
         a~\emph{rigid frame}. The same technique is used here as in the damping algorithm described
         in sec.~\ref{sssec:proposed_changes}. The only difference is that the factor $k$
         in~\eqref{eq:damping} is assumed to be equal to 1. That is, the individual deviations of
-        velocities are suppressed entirely. This action should be also done at each step after
+        velocities are suppressed completely. This action should also be done at each step after
         integrating velocities but before damping. Otherwise the simulation may become unstable due
         to the oscillations caused by this interference.
 
@@ -828,7 +827,7 @@
 
         Change of shape of the object is not the only result of deformation of an object in a
         virtual reality application. Typical events and their consequences may be illustrated by the
-        example of automobile simulator. Fragile objects such as windows and mirrors should be
+        example of an automobile simulator. Fragile objects such as windows and mirrors should be
         destroyed in case of a direct stroke or a significant change of their shape. An engine
         should stop working after a serious deformation of the body around it. Finally, an
         automobile should slow down if the body is so much deformed that it touches the road.
@@ -865,7 +864,7 @@
 
         \paragraph{Deviation from initial shape.}
         In order to detect such events it is necessary to store initial position of every vertex.
-        Making computations in the center-of-momentum frame simplifies detection of the deviation.
+        Performing computations in the center-of-momentum frame simplifies detection of the deviation.
         Due to the fact that such false deformations as shifts and rotations are automatically
         eliminated, the deviation can be found simply as the difference between the current and the
         initial positions.
@@ -891,10 +890,10 @@
         initial shape happened. In order to eliminate such false detections it is necessary to
         determine the shift and the rotation of the rigid frame relative to the center-of-momentum
         frame.  If these shift and rotation are subtracted from the position of a vertex before
-        comparing it to its initial position, then the positions of vertices forming the rigid frame
+        comparing to the initial position, then the positions of vertices forming the rigid frame
         will be always equal to their initial positions. The shift and the rotation are found by
         integrating linear and angular velocities of the rigid frame at each step. But in order to
-        ''subtract'' the rotation we need to invert the rotation matrix (i.e. transpose it, since it
+        ``subtract'' the rotation we need to invert the rotation matrix (i.e. transpose it, since it
         is orthogonal). To avoid doing it at each step the vector of angular velocity can simply be
         inverted during its integration.
 
@@ -1006,8 +1005,7 @@
         \vect{n}^\transposed (\vect x - \vect{x}_0) = 0.
         \]
         Let $\matx M$ be the matrix that is used for transforming positions of points. Then taking
-        into account that $\matx{M}^{-1} \matx{M} = \matx{E}$ the plane equation is transformed as
-        follows:
+        into account that $\matx{M}^{-1} \matx{M} = \matx{E}$ the plane equation yields:
         \[
           \vect{n}^\transposed \matx{M}^{-1} \matx{M} (\vect x - \vect{x}_0) = 0,
         \]
@@ -1021,8 +1019,8 @@
 
         Finally, the formulas for updating parallel and normal to the surface vectors are, respectively:
         \begin{eqnarray}
-          \vect{t}_i\!' & = & \matx{R} \matx{S}^{ост} \vect{t}^{\;0}_i, \label{eq:tangent_vectors} \\
-          \vect{n}'_i & = & \left(\left(\matx{R} \matx{S}^{ост}\right)^{-1}\right)^\transposed \vect{n}^0_i. \label{eq:normal_vectors}
+          \vect{t}_i\!' & = & \matx{R} \matx{S}^{res} \vect{t}^{\;0}_i, \label{eq:tangent_vectors} \\
+          \vect{n}'_i & = & \left(\left(\matx{R} \matx{S}^{res}\right)^{-1}\right)^\transposed \vect{n}^0_i. \label{eq:normal_vectors}
         \end{eqnarray}
 
 \begin{original}
@@ -1082,7 +1080,7 @@
         расчёт деформации отображаемой сетки может производиться параллельно выполнению этой задачи.
 \end{original}
 
-        The basic algorithm includes a stage containing of independent and uniform blocks of
+        The basic algorithm includes a stage consisted of independent and uniform blocks of
         actions. It is a stage of shape matching for every cluster. Current positions of the
         vertices, being the input data of this stage, are not changed during its execution. So that
         the order of applying this operation to each cluster is not important. That is why its
@@ -1090,7 +1088,7 @@
         of the algorithm includes actions performed over the whole set of vertices at once, each of
         which uses the result of the previous one. They cannot be executed in parallel, so they all
         are combined into a single task which is executed after all tasks of the first stage are
-        completed. This big task is called ''the whole-body processing task'' further. It is
+        completed. This big task is called \emph{the whole-body processing task} further. It is
         important here that the matrices included in the formula \eqref{eq:graphical_pos} are
         already computed by the start of this whole-body processing task. It means that updating the
         displayed mesh can be done simultaneously with the execution of this task.
@@ -1119,8 +1117,8 @@
         Further, portability of the system is improved by eliminating the dependence on particular
         library for thread management. Thus the system should only provide a thread-safe interface
         for obtaining and executing the tasks in the appropriate order. Such interface is called
-        a~''thread-safe task queue''. By queue here meant is merely the strict order of distributing
-        tasks for execution, but finishing a task before starting the next one is not required
+        a~\emph{thread-safe task queue}. By queue here meant is merely the strict order of starting
+        tasks, but finishing a task before starting the next one is not required.
 
       \subsubsection{Using graphical processor}\label{sssec:using_gpu}
 
@@ -1139,8 +1137,8 @@
         чего система предоставляет отдельный интерфейс.
 \end{original}
 
-        A graphical processor is included into all contemporary video adapters and is intended
-        primarily for accelerating the process of generating the image of 3D scene. Moder graphical
+        Graphical processors are included into all contemporary video adapters and are intended
+        primarily for accelerating the process of generating images of 3D scenes. Modern graphical
         processors have high computational power and allow performing computations which are not
         related directly to producing images. When a graphical processor is used for such
         computations the computational load is distributed between it and the central processor,
@@ -1165,7 +1163,7 @@
 
         \paragraph{Possibilities of graphical processors.}
         The process of creating an image by a graphical processor is a pipeline performing parallel
-        processing of data at each stage. Processed are separate vertices, geometrical primitives
+        processing of data at each stage. The types of processed data are vertices, geometrical primitives
         and, finally, pixels of displayed 2D image. A special program called \emph{shader} is
         responsible for processing at each stage. It is applied independently to each object: a
         vertex, a primitive or a pixel. Besides the current object a shader has access to some data
@@ -1186,15 +1184,15 @@
 \end{original}
 
         \paragraph{Choosing an appropriate task.}
-        As a result of the features of shaders listed above not all of the tasks can be executed on
-        a graphical processor. In this work the most suitable for is is the task of computing new
-        positions of visible mesh vertices after deformations. First, one of the stages of the graphical
+        As a consequence of the listed features of shaders not all of the tasks can be executed on
+        a graphical processor. In this work the most suitable task for it is computing new positions
+        of the visible mesh vertices after deformations. First, one of the stages of the graphical
         processor pipeline is exactly for processing the vertices. Second, according to the
         formula~\eqref{eq:graphical_pos} only the initial position of vertex and the constant parameters of
-        clusters are required for computing a new position of the vertex, that is only the data
-        available in the vertex shader. Finally, only vector arithmetics and multiplying a matrix
-        by a vector are used in computation. All these operation are present in the instruction set
-        of graphical processors.
+        clusters are required for computing a new position of the vertex. That is, all required data
+        are available in the vertex shader. Finally, only vector arithmetic operations and multiplying
+        a matrix by a vector are used in computation. All these operation are present in the
+        instruction set of graphical processors.
 
 \begin{original}
         \paragraph{Реализация вычислений в вершинном шейдере.}
@@ -1225,16 +1223,16 @@
         subsequent averaging (in case of multiple clusters) can be performed in a vertex shader if
         required parameters of all clusters (the initial and the current center of mass and the
         matrix $\matx D = \matx{R} \matx{S}^{res}$) are passed to it as shader constants. Since
-        every vertex may be included into several clusters their indices should be associated with
-        the vertex. An analogous task appears during implementation of skinning animation with matrices
-        \cite{gpu-gems-skinning}, so a similar approach is used here. The number of clusters including
+        every vertex may be included into several clusters, their indices should be associated with
+        the vertex. An analogous task arises during implementation of skinning animation with
+        matrices, so a similar approach is used here. The number of clusters including
         a vertex may vary between different vertices. Since the structure describing a vertex cannot
         have a variable size, a set of indices is represented as an array of fixed size and the
         number of elements in the array. The size of array is equal to maximum possible number of
         clusters for a single vertex which depends on the method of decomposing the object into
-        clusters. This values are written only once during the initialization of the object. The
-        need for writing into the buffer of visible vertices in the main loop is also eliminated.
-        Instead, only the new parameters of clusters should be stored into appropriate shader constants.
+        clusters. These values are written only once during the initialization of the object. The
+        need for writing into the buffer of visible vertices in the main loop is thus eliminated.
+        Instead, only the new parameters of clusters should be copied into appropriate shader constants.
 
 \begin{original}
         \paragraph{Используемые ресурсы.}
@@ -1281,17 +1279,17 @@
       трёхмерной моделью объекта.
 \end{original}
 
-      Correctness of the system operation was tested at two levels: the level of separate
+      Correctness of the system operation was tested at two levels: the level of individual
       functions and the level of the whole system. Unit-testing was applied for testing
-      individual functions: a few tests were written for each of them which ensure that it works
+      functions: a few tests were written for each of them which ensure that it works
       correctly in some typical cases. This approach is convenient for testing mathematical
       functions, utility functions such as logging and error handling, field access methods; for
       checking handling of incorrect arguments and computing such predictable values as the center
       of mass or the moment of inertia. Advantages of unit-testing are the ease of
-      localization of a mistake and the possibility to check operational integrity of the system
+      localization of a mistake and the possibility to validate operational integrity of the system
       after major changes such as refactoring and optimization. At the same time it is important to
       test the plausibility of simulated deformation. But it is difficult to formulate a
-      mathematical criteria of plausibility, so unit-tests do not suit for this task. Such testing
+      mathematical criteria of plausibility, so automated tests do not suit well for this task. Such testing
       should be performed by a human, so a simple interactive application was developed. It allows
       users to expose a test object to different impacts and to observe the consequent changes of 3D
       model of the object
@@ -1330,7 +1328,7 @@
 \end{original}
 
       Two test objects were used to check the realism of deformations and to measure the
-      performance: ''Cylinder'' (with simple geometry) and ''Automobile'' (with more complex
+      performance: ``Cylinder'' (with simple geometry) and ``Automobile'' (with more complex
       geometry).
 
       \subsubsection{Cylinder}\label{sssec:cylinder}
@@ -1345,7 +1343,7 @@
         physical model grouped into 16 clusters and \num{20102} vertices (\num{40398} triangles) in
         the visible mesh. Its initial shape is shown in fig.~\ref{fig:cylinder-initial}.
 
-        \begin{myfigure}{test object ''Cylinder''}{fig:cylinder}
+        \begin{myfigure}{test object ``Cylinder''}{fig:cylinder}
           \subfigure[width=0.25\textwidth]{Initial state}       {cylinder-initial}    \hspace{1cm}
           \subfigure[width=0.25\textwidth]{Hit at the middle}   {cylinder-deformed-1} \\
           \subfigure[width=0.25\textwidth]{Hit at the edge}     {cylinder-deformed-2} \hspace{1cm}
@@ -1426,12 +1424,12 @@
         треугольника) в отображаемой сетке. Исходная форма объекта показана на рис.~\ref{fig:car-initial}.
 \end{original}
 
-        As an object with complex geometry here used is a model of automobile containing \num{9413}
+        As an object with complex geometry here used is a model of automobile consisting of \num{9413}
         points in the physical model grouped into \num{24} clusters and \num{28241} vertices
         (\num{34534} triangles) in the visible mesh. The initial shape of the object is shown in
         fig.~\ref{fig:car-initial}.
 
-        \begin{myfigure}{test object ''Automobile''}{fig:car}
+        \begin{myfigure}{test object ``Automobile''}{fig:car}
           \subfigure[width=0.3\textwidth]{Initial state}       {car-initial}    \hspace{1cm}
           \subfigure[width=0.3\textwidth]{Hit at the middle}   {car-deformed-1} \\
           \subfigure[width=0.3\textwidth]{Hit at the edge}     {car-deformed-2} \hspace{1cm}
